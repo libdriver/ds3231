@@ -6,9 +6,12 @@
 
 [English](/README.md) | [ 简体中文](/README_CN.md)
 
+The DS3231 is a low-cost, extremely accurate I2C real-time clock (RTC) with an integrated temperature compensated crystal oscillator (TCXO) and crystal. The device incorporates a battery input, and maintains accurate timekeeping when main power to the device is interrupted. The integration of the crystal resonator enhances the long-term accuracy of the device as well as reduces the piece-part count in a manufacturing line. The DS3231 is available in commercial and industrial temperature ranges, and is offered in a 16-pin, 300-mil SO package.
+
+LibDriver DS3231 is a full function driver of ds3231 launched by LibDriver.It provides time reading, alarm clock triggering, temperature reading, square wave output and other functions.
+
 ### Table of Contents
 
-  - [Description](#Description)
   - [Instruction](#Instruction)
   - [Install](#Install)
   - [Usage](#Usage)
@@ -19,13 +22,6 @@
   - [Contributing](#Contributing)
   - [License](#License)
   - [Contact Us](#Contact-Us)
-
-
-### Description
-
-The DS3231 is a low-cost, extremely accurate I2C real-time clock (RTC) with an integrated temperature compensated crystal oscillator (TCXO) and crystal. The device incorporates a battery input, and maintains accurate timekeeping when main power to the device is interrupted. The integration of the crystal resonator enhances the long-term accuracy of the device as well as reduces the piece-part count in a manufacturing line. The DS3231 is available in commercial and industrial temperature ranges, and is offered in a 16-pin, 300-mil SO package.
-
-LibDriver DS3231 is a full function driver of ds3231 launched by LibDriver.It provides time reading, alarm clock triggering, temperature reading, square wave output and other functions.
 
 ### Instruction
 
