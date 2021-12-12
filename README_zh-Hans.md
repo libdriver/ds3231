@@ -6,46 +6,46 @@
 
 [English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
 
-The DS3231 is a low-cost, extremely accurate I2C real-time clock (RTC) with an integrated temperature compensated crystal oscillator (TCXO) and crystal. The device incorporates a battery input, and maintains accurate timekeeping when main power to the device is interrupted. The integration of the crystal resonator enhances the long-term accuracy of the device as well as reduces the piece-part count in a manufacturing line. The DS3231 is available in commercial and industrial temperature ranges, and is offered in a 16-pin, 300-mil SO package.
+DS3231是低成本、高精度IIC实时时钟，具有集成的温补晶体振荡器和晶体。该器件包含电池输入端，断开主电源时仍可保持精确的及时。集成晶体振荡器提高了器件的长期精确度，并减少了生产线的元件数量。DS3231提供商用级和工业级温度范围，采用16引脚、300mil的SO封装。
 
-LibDriver DS3231 is a full function driver of ds3231 launched by LibDriver.It provides time reading, alarm clock triggering, temperature reading, square wave output and other functions.
+LibDriver DS3231是LibDriver推出的DS3231全功能驱动，该驱动提供时间读取、闹钟触发、温度读取和方波输出等功能。
 
-### Table of Contents
+### 目录
 
-  - [Instruction](#Instruction)
-  - [Install](#Install)
-  - [Usage](#Usage)
+  - [说明](#说明)
+  - [安装](#安装)
+  - [使用](#使用)
     - [example basic](#example-basic)
     - [example alarm](#example-alarm)
     - [example output](#example-output)
-  - [Document](#Document)
-  - [Contributing](#Contributing)
-  - [License](#License)
-  - [Contact Us](#Contact-Us)
+  - [文档](#文档)
+  - [贡献](#贡献)
+  - [版权](#版权)
+  - [联系我们](#联系我们)
 
-### Instruction
+### 说明
 
-/src includes LibDriver DS3231 source files.
+/src目录包含了LibDriver DS3231的源文件。
 
-/interface includes LibDriver DS3231 IIC platform independent template。
+/interface目录包含了LibDriver DS3231与平台无关的IIC总线模板。
 
-/test includes LibDriver DS3231 driver test code and this code can test the chip necessary function simply。
+/test目录包含了LibDriver DS3231驱动测试程序，该程序可以简单的测试芯片必要功能。
 
-/example includes LibDriver DS3231 sample code.
+/example目录包含了LibDriver DS3231编程范例。
 
-/doc includes LibDriver DS3231 offline document.
+/doc目录包含了LibDriver DS3231离线文档。
 
-/datasheet includes DS3231 datasheet。
+/datasheet目录包含了DS3231数据手册。
 
-/project includes the common Linux and MCU development board sample code. All projects use the shell script to debug the driver and the detail instruction can be found in each project's README.md.
+/project目录包含了常用Linux与单片机开发板的工程样例。所有工程均采用shell脚本作为调试方法，详细内容可参考每个工程里面的README.md。
 
-### Install
+### 安装
 
-Reference /interface IIC platform independent template and finish your platform IIC driver.
+参考/interface目录下与平台无关的IIC总线模板，完成指定平台的IIC总线驱动。
 
-Add /src, /interface and /example to your project.
+将/src目录，/interface目录和/example目录加入工程。
 
-### Usage
+### 使用
 
 #### example basic
 
@@ -256,60 +256,28 @@ ds3231_output_deinit();
 return 0;
 ```
 
-### Document
+### 文档
 
-Online documents: https://www.libdriver.com/docs/ds3231/index.html
+在线文档: https://www.libdriver.com/docs/ds3231/index.html
 
-Offline documents: /doc/html/index.html
+离线文档: /doc/html/index.html
 
-### Contributing
+### 贡献
 
-Please sent an e-mail to lishifenging@outlook.com
+请联系lishifenging@outlook.com
 
-### License
+### 版权
 
-Copyright (c) 2015 - present LibDriver All rights reserved
+版权 (c) 2015 - 现在 LibDriver 版权所有
 
+MIT 许可证（MIT）
 
+特此免费授予任何获得本软件副本和相关文档文件（下称“软件”）的人不受限制地处置该软件的权利，包括不受限制地使用、复制、修改、合并、发布、分发、转授许可和/或出售该软件副本，以及再授权被配发了本软件的人如上的权利，须在下列条件下：
 
-The MIT License (MIT) 
+上述版权声明和本许可声明应包含在该软件的所有副本或实质成分中。
 
+本软件是“如此”提供的，没有任何形式的明示或暗示的保证，包括但不限于对适销性、特定用途的适用性和不侵权的保证。在任何情况下，作者或版权持有人都不对任何索赔、损害或其他责任负责，无论这些追责来自合同、侵权或其它行为中，还是产生于、源于或有关于本软件以及本软件的使用或其它处置。
 
+### 联系我们
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-
-of this software and associated documentation files (the "Software"), to deal
-
-in the Software without restriction, including without limitation the rights
-
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-
-copies of the Software, and to permit persons to whom the Software is
-
-furnished to do so, subject to the following conditions: 
-
-
-
-The above copyright notice and this permission notice shall be included in all
-
-copies or substantial portions of the Software. 
-
-
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-
-SOFTWARE. 
-
-### Contact Us
-
-Please sent an e-mail to lishifenging@outlook.com
+请联系lishifenging@outlook.com
