@@ -16,10 +16,10 @@ var group__ds3231__alarm__driver =
       [ "DS3231_ALARM2_MODE_WEEK_HOUR_MINUTE_MATCH", "group__ds3231__alarm__driver.html#gga49d96ca82744a09bc5e933972708a76baad983329c9e9bda5dc4080dda75b0442", null ]
     ] ],
     [ "ds3231_alarm_clear", "group__ds3231__alarm__driver.html#ga778045abae85c26cc9b0fa40b60188da", null ],
-    [ "ds3231_get_alarm1", "group__ds3231__alarm__driver.html#ga3324d979084377b70155a762b49fee8b", null ],
-    [ "ds3231_get_alarm2", "group__ds3231__alarm__driver.html#ga0f4bfdaa4ef32838bd20327052f899a3", null ],
+    [ "ds3231_get_alarm1", "group__ds3231__alarm__driver.html#ga4cba773db2d900e023dce8a8223aa55a", null ],
+    [ "ds3231_get_alarm2", "group__ds3231__alarm__driver.html#ga907fa44e0f9b5ede2633ceb2193580ad", null ],
     [ "ds3231_get_alarm_interrupt", "group__ds3231__alarm__driver.html#ga266fe010eb4fdd4c0aadf2187dd5a1c2", null ],
-    [ "ds3231_set_alarm1", "group__ds3231__alarm__driver.html#ga86ae790fb95f289a4cbdb8a450c82643", null ],
-    [ "ds3231_set_alarm2", "group__ds3231__alarm__driver.html#gaf8dec5fa7d4997de23faabf5105296da", null ],
+    [ "ds3231_set_alarm1", "group__ds3231__alarm__driver.html#ga7d17165899cecab984204572934a7792", null ],
+    [ "ds3231_set_alarm2", "group__ds3231__alarm__driver.html#ga613e9afc81d5f8eaba82178702d9adb5", null ],
     [ "ds3231_set_alarm_interrupt", "group__ds3231__alarm__driver.html#ga30ef06098c0b1854aa792a28da547576", null ]
 ];

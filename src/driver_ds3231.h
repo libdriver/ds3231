@@ -35,8 +35,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_DS3231_H_
-#define _DRIVER_DS3231_H_
+#ifndef DRIVER_DS3231_H
+#define DRIVER_DS3231_H
 
 #include <stdio.h>
 #include <stdint.h>
@@ -179,8 +179,8 @@ typedef struct ds3231_handle_s
     uint8_t (*iic_deinit)(void);                                                        /**< point to a iic_deinit function address */
     uint8_t (*iic_write)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);        /**< point to a iic_write function address */
     uint8_t (*iic_read)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);         /**< point to a iic_read function address */
-    uint16_t (*debug_print)(char *fmt, ...);                                            /**< point to a debug_print function address */
-    uint8_t (*receive_callback)(uint8_t type);                                          /**< point to a receive_callback function address */
+    void (*debug_print)(const char *const fmt, ...);                                    /**< point to a debug_print function address */
+    void (*receive_callback)(uint8_t type);                                             /**< point to a receive_callback function address */
     void (*delay_ms)(uint32_t ms);                                                      /**< point to a delay_ms function address */
     uint8_t inited;                                                                     /**< inited flag */
 } ds3231_handle_t;
@@ -336,7 +336,7 @@ uint8_t ds3231_irq_handler(ds3231_handle_t *handle);
 /**
  * @brief     set the current time
  * @param[in] *handle points to a ds3231 handle structure
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @return    status code
  *            - 0 success
  *            - 1 set time failed
@@ -345,12 +345,12 @@ uint8_t ds3231_irq_handler(ds3231_handle_t *handle);
  *            - 4 time is invalide
  * @note      none
  */
-uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *time);
+uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *t);
 
 /**
  * @brief      get the current time
  * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @return     status code
  *             - 0 success
  *             - 1 get time failed
@@ -358,7 +358,7 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *time);
  *             - 3 handle is not initialized
  * @note       none
  */
-uint8_t ds3231_get_time(ds3231_handle_t *handle, ds3231_time_t *time);
+uint8_t ds3231_get_time(ds3231_handle_t *handle, ds3231_time_t *t);
 
 /**
  * @brief     enable or disable the oscillator
@@ -596,7 +596,7 @@ uint8_t ds3231_get_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm
 /**
  * @brief     set the alarm1 time
  * @param[in] *handle points to a ds3231 handle structure
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @param[in] mode is the alarm1 interrupt mode
  * @return    status code
  *            - 0 success
@@ -605,12 +605,12 @@ uint8_t ds3231_get_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm
  *            - 3 handle is not initialized
  * @note      none
  */
-uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_alarm1_mode_t mode);
+uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alarm1_mode_t mode);
 
 /**
  * @brief      get the alarm1 time
  * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @param[out] *mode points to a alarm1 interrupt mode buffer
  * @return     status code
  *             - 0 success
@@ -619,12 +619,12 @@ uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
  *             - 3 handle is not initialized
  * @note       none
  */
-uint8_t ds3231_get_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_alarm1_mode_t *mode);
+uint8_t ds3231_get_alarm1(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alarm1_mode_t *mode);
 
 /**
  * @brief     set the alarm2 time
  * @param[in] *handle points to a ds3231 handle structure
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @param[in] mode is the alarm2 interrupt mode
  * @return    status code
  *            - 0 success
@@ -633,12 +633,12 @@ uint8_t ds3231_get_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
  *            - 3 handle is not initialized
  * @note      none
  */
-uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_alarm2_mode_t mode);
+uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alarm2_mode_t mode);
 
 /**
  * @brief      get the alarm2 time
  * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @param[out] *mode points to a alarm2 interrupt mode buffer
  * @return     status code
  *             - 0 success
@@ -647,7 +647,7 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
  *             - 3 handle is not initialized
  * @note       none
  */
-uint8_t ds3231_get_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_alarm2_mode_t *mode);
+uint8_t ds3231_get_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alarm2_mode_t *mode);
 
 /**
  * @brief     clear the alarm flag

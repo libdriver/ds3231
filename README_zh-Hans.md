@@ -1,4 +1,4 @@
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md) | [日本語](/README_ja.md) | [Deutsch](/README_de.md) | [한국어](/README_ko.md)
 
 <div align=center>
 <img src="/doc/image/logo.png"/>
@@ -6,11 +6,11 @@
 
 ## LibDriver DS3231
 
-[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/ds3231/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
+[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/ds3231/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 DS3231是低成本、高精度IIC实时时钟，具有集成的温补晶体振荡器和晶体。该器件包含电池输入端，断开主电源时仍可保持精确的及时。集成晶体振荡器提高了器件的长期精确度，并减少了生产线的元件数量。DS3231提供商用级和工业级温度范围，采用16引脚、300mil的SO封装。
 
-LibDriver DS3231是LibDriver推出的DS3231全功能驱动，该驱动提供时间读取、闹钟触发、温度读取和方波输出等功能。
+LibDriver DS3231是LibDriver推出的DS3231全功能驱动，该驱动提供时间读取、闹钟触发、温度读取和方波输出等功能并且它符合MISRA标准。
 
 ### 目录
 
@@ -58,7 +58,7 @@ int16_t raw;
 float s;
 
 res = ds3231_basic_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -66,9 +66,9 @@ if (res)
 ...
 
 res = ds3231_basic_get_temperature((int16_t *)&raw, (float *)&s);
-if (res)
+if (res != 0)
 {
-    ds3231_basic_deinit();
+    (void)ds3231_basic_deinit();
 
     return 1;
 }
@@ -86,9 +86,9 @@ time.second = second;
 time.week  = week;
 time.year = year;
 res = ds3231_basic_set_time(&time);
-if (res)
+if (res != 0)
 {
-    ds3231_basic_deinit();
+    (void)ds3231_basic_deinit();
 
     return 1;
 }
@@ -96,9 +96,9 @@ if (res)
 ...
     
 res = ds3231_basic_get_time(&time);
-if (res)
+if (res != 0)
 {
-    ds3231_basic_deinit();
+    (void)ds3231_basic_deinit();
 
     return 1;
 }
@@ -121,7 +121,7 @@ else
 
 ...
 
-ds3231_basic_deinit();
+(void)ds3231_basic_deinit();
 
 return 0;
 ```
@@ -133,7 +133,7 @@ uint8_t res;
 ds3231_time_t time;
 ds3231_alarm1_mode_t mode;
 
-uint8_t alarm_receive_callback(uint8_t type)
+void alarm_receive_callback(uint8_t type)
 {
     switch (type)
     {
@@ -162,13 +162,11 @@ uint8_t alarm_receive_callback(uint8_t type)
             break;
         }
     }
-        
-    return 0;
 }
 
 
 res = ds3231_alarm_init(alarm_receive_callback);
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -176,9 +174,9 @@ if (res)
 ...
 
 res = gpio_interrupt_init();
-if (res)
+if (res != 0)
 {
-    ds3231_alarm_deinit();
+    (void)ds3231_alarm_deinit();
 
     return 1;
 }
@@ -196,9 +194,9 @@ time.second = second;
 time.week  = week;
 time.year = year;
 res = ds3231_alarm_set_alarm1(&time, mode);
-if (res)
+if (res != 0)
 {
-    ds3231_alarm_deinit();
+    (void)ds3231_alarm_deinit();
 
     return 1;
 }
@@ -206,16 +204,16 @@ if (res)
 ...
 
 res = ds3231_alarm_enable(DS3231_ALARM_1);
-if (res)
+if (res != 0)
 {
-    ds3231_alarm_deinit();
+    (void)ds3231_alarm_deinit();
 
     return 1;
 }
 
 ...
 
-ds3231_alarm_deinit();
+(void)ds3231_alarm_deinit();
 
 return 0;
 ```
@@ -226,7 +224,7 @@ return 0;
 uint8_t res;
 
 res = ds3231_output_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -234,9 +232,9 @@ if (res)
 ...
 
 res = ds3231_output_set_square_wave(enable);
-if (res)
+if (res != 0)
 {
-    ds3231_output_deinit();
+    (void)ds3231_output_deinit();
 
     return 1;
 }
@@ -244,16 +242,16 @@ if (res)
 ...
 
 res = ds3231_output_set_32khz_output(enable);
-if (res)
+if (res != 0)
 {
-    ds3231_output_deinit();
+    (void)ds3231_output_deinit();
 
     return 1;
 }
 
 ...
 
-ds3231_output_deinit();
+(void)ds3231_output_deinit();
 
 return 0;
 ```

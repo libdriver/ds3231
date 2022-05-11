@@ -12,14 +12,14 @@ var group__ds3231__base__driver =
       [ "year", "structds3231__time__s.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5", null ]
     ] ],
     [ "ds3231_handle_s", "structds3231__handle__s.html", [
-      [ "debug_print", "structds3231__handle__s.html#a75f9f50c23e87e9407f9ec4e34bb42f2", null ],
+      [ "debug_print", "structds3231__handle__s.html#a769d5b3a6c14790a0e126e8fe70b384b", null ],
       [ "delay_ms", "structds3231__handle__s.html#a406c9433252b7366de417b7a60915c81", null ],
       [ "iic_deinit", "structds3231__handle__s.html#af6963bbad902ca6e43942b48c07986c3", null ],
       [ "iic_init", "structds3231__handle__s.html#a8826dd07625f8d90859ce9bd09628d61", null ],
       [ "iic_read", "structds3231__handle__s.html#af4ef726288b88f51a846483803a1249b", null ],
       [ "iic_write", "structds3231__handle__s.html#adca3ee7a793bbf510d5267daf0fcf1c5", null ],
       [ "inited", "structds3231__handle__s.html#a19bedf28d2b9748f6a62d9ae93f4e68f", null ],
-      [ "receive_callback", "structds3231__handle__s.html#aa2f0ad453e9509af4703f1db48bb16e6", null ]
+      [ "receive_callback", "structds3231__handle__s.html#a4a9a1af4e28aea769f6d9f02a02e07c3", null ]
     ] ],
     [ "ds3231_info_s", "structds3231__info__s.html", [
       [ "chip_name", "structds3231__info__s.html#af890958c72bd715cc6454a10dc846ae6", null ],
@@ -62,10 +62,10 @@ var group__ds3231__base__driver =
     [ "ds3231_deinit", "group__ds3231__base__driver.html#gadd1988301d419380a0d6bdf769233ca0", null ],
     [ "ds3231_get_oscillator", "group__ds3231__base__driver.html#ga0e7218d30b2a689890f8921bd12d4641", null ],
     [ "ds3231_get_status", "group__ds3231__base__driver.html#gaea7c133c8e759c94b8d0e29047ffe922", null ],
-    [ "ds3231_get_time", "group__ds3231__base__driver.html#ga94478f9a98520f9236923dd5b16482c2", null ],
+    [ "ds3231_get_time", "group__ds3231__base__driver.html#gabe9d692b88f8d5710ead0067ca3420b3", null ],
     [ "ds3231_info", "group__ds3231__base__driver.html#ga345a8eeaa00e23e1387408d4e0a5948f", null ],
     [ "ds3231_init", "group__ds3231__base__driver.html#gaaba87dc05cadec0df3dc0b914596f52f", null ],
     [ "ds3231_irq_handler", "group__ds3231__base__driver.html#ga428a39a0a96085e8481cbb538c9f7789", null ],
     [ "ds3231_set_oscillator", "group__ds3231__base__driver.html#ga019899f8bed7d2c8afd6f08634e57e68", null ],
-    [ "ds3231_set_time", "group__ds3231__base__driver.html#ga451665d26ef3b5e59dcb1ee6ddfcd4f7", null ]
+    [ "ds3231_set_time", "group__ds3231__base__driver.html#ga05b741038c591595714004c1269a3f09", null ]
 ];

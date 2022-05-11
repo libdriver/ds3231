@@ -49,10 +49,10 @@ static ds3231_handle_t gs_handle;        /**< ds3231 handle */
  */
 uint8_t ds3231_register_test(void)
 {
-    volatile uint8_t res;
-    volatile int8_t offset, offset_check;
-    volatile uint8_t status;
-    volatile float o, o_check;
+    uint8_t res;
+    int8_t offset, offset_check;
+    uint8_t status;
+    float o, o_check;
     ds3231_info_t info;
     ds3231_time_t time_in, time_out;
     ds3231_alarm1_mode_t mode1;
@@ -72,7 +72,7 @@ uint8_t ds3231_register_test(void)
     
     /* get ds3231 info */
     res = ds3231_info(&info);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get info failed.\n");
        
@@ -97,7 +97,7 @@ uint8_t ds3231_register_test(void)
     
     /* init ds3231 */
     res = ds3231_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: init failed.\n");
         
@@ -123,18 +123,18 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res  = ds3231_set_time(&gs_handle, &time_in);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set time failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     res = ds3231_get_time(&gs_handle, &time_out);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get time failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -155,18 +155,18 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res  = ds3231_set_time(&gs_handle, &time_in);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set time failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     res = ds3231_get_time(&gs_handle, &time_out);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get time failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -190,18 +190,18 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm1(&gs_handle, &time_in, DS3231_ALARM1_MODE_WEEK_HOUR_MINUTE_SECOND_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     res = ds3231_get_alarm1(&gs_handle, &time_out, &mode1);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -223,18 +223,18 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm1(&gs_handle, &time_in, DS3231_ALARM1_MODE_WEEK_HOUR_MINUTE_SECOND_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     res = ds3231_get_alarm1(&gs_handle, &time_out, &mode1);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -256,19 +256,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm1(&gs_handle, &time_in, DS3231_ALARM1_MODE_ONCE_A_SECOND);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set alarm1 mode ALARM1_MODE_ONCE_A_SECOND.\n");
     res = ds3231_get_alarm1(&gs_handle, &time_out, &mode1);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -289,19 +289,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm1(&gs_handle, &time_in, DS3231_ALARM1_MODE_SECOND_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set alarm1 mode ALARM1_MODE_SECOND_MATCH.\n");
     res = ds3231_get_alarm1(&gs_handle, &time_out, &mode1);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -322,19 +322,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm1(&gs_handle, &time_in, DS3231_ALARM1_MODE_MINUTE_SECOND_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set alarm1 mode ALARM1_MODE_MINUTE_SECOND_MATCH.\n");
     res = ds3231_get_alarm1(&gs_handle, &time_out, &mode1);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -355,19 +355,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm1(&gs_handle, &time_in, DS3231_ALARM1_MODE_HOUR_MINUTE_SECOND_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set alarm1 mode ALARM1_MODE_HOUR_MINUTE_SECOND_MATCH.\n");
     res = ds3231_get_alarm1(&gs_handle, &time_out, &mode1);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -388,19 +388,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm1(&gs_handle, &time_in, DS3231_ALARM1_MODE_DATE_HOUR_MINUTE_SECOND_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set alarm1 mode ALARM1_MODE_DATE_HOUR_MINUTE_SECOND_MATCH.\n");
     res = ds3231_get_alarm1(&gs_handle, &time_out, &mode1);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -421,19 +421,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm1(&gs_handle, &time_in, DS3231_ALARM1_MODE_WEEK_HOUR_MINUTE_SECOND_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set alarm1 mode ALARM1_MODE_WEEK_HOUR_MINUTE_SECOND_MATCH.\n");
     res = ds3231_get_alarm1(&gs_handle, &time_out, &mode1);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm1 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -457,18 +457,18 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm2(&gs_handle, &time_in, DS3231_ALARM2_MODE_WEEK_HOUR_MINUTE_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     res = ds3231_get_alarm2(&gs_handle, &time_out, &mode2);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -490,18 +490,18 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm2(&gs_handle, &time_in, DS3231_ALARM2_MODE_WEEK_HOUR_MINUTE_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     res = ds3231_get_alarm2(&gs_handle, &time_out, &mode2);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -523,19 +523,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm2(&gs_handle, &time_in, DS3231_ALARM2_MODE_ONCE_A_MINUTE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set mode ALARM2_MODE_ONCE_A_MINUTE.\n");
     res = ds3231_get_alarm2(&gs_handle, &time_out, &mode2);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -556,19 +556,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm2(&gs_handle, &time_in, DS3231_ALARM2_MODE_MINUTE_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set mode ALARM2_MODE_MINUTE_MATCH.\n");
     res = ds3231_get_alarm2(&gs_handle, &time_out, &mode2);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -589,19 +589,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm2(&gs_handle, &time_in, DS3231_ALARM2_MODE_HOUR_MINUTE_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set mode ALARM2_MODE_HOUR_MINUTE_MATCH.\n");
     res = ds3231_get_alarm2(&gs_handle, &time_out, &mode2);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -622,19 +622,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm2(&gs_handle, &time_in, DS3231_ALARM2_MODE_DATE_HOUR_MINUTE_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set mode ALARM2_MODE_DATE_HOUR_MINUTE_MATCH.\n");
     res = ds3231_get_alarm2(&gs_handle, &time_out, &mode2);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -655,19 +655,19 @@ uint8_t ds3231_register_test(void)
                                  time_in.hour, time_in.minute, time_in.second, time_in.week
                                 );
     res = ds3231_set_alarm2(&gs_handle, &time_in, DS3231_ALARM2_MODE_WEEK_HOUR_MINUTE_MATCH);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set mode ALARM2_MODE_WEEK_HOUR_MINUTE_MATCH.\n");
     res = ds3231_get_alarm2(&gs_handle, &time_out, &mode2);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm2 failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -678,19 +678,19 @@ uint8_t ds3231_register_test(void)
     
     /* enable */
     res = ds3231_set_oscillator(&gs_handle, DS3231_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set oscillator failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: enable.\n");
     res = ds3231_get_oscillator(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get oscillator failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -698,19 +698,19 @@ uint8_t ds3231_register_test(void)
     
     /* disable */
     res = ds3231_set_oscillator(&gs_handle, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set oscillator failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: disable.\n");
     res = ds3231_get_oscillator(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get oscillator failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -721,19 +721,19 @@ uint8_t ds3231_register_test(void)
     
     /* alarm1 enable*/
     res = ds3231_set_alarm_interrupt(&gs_handle, DS3231_ALARM_1, DS3231_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: alarm1 enable.\n");
     res = ds3231_get_alarm_interrupt(&gs_handle, DS3231_ALARM_1, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -741,19 +741,19 @@ uint8_t ds3231_register_test(void)
     
     /* alarm1 disable*/
     res = ds3231_set_alarm_interrupt(&gs_handle, DS3231_ALARM_1, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: alarm1 disable.\n");
     res = ds3231_get_alarm_interrupt(&gs_handle, DS3231_ALARM_1, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -761,19 +761,19 @@ uint8_t ds3231_register_test(void)
     
     /* alarm2 enable*/
     res = ds3231_set_alarm_interrupt(&gs_handle, DS3231_ALARM_2, DS3231_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: alarm2 enable.\n");
     res = ds3231_get_alarm_interrupt(&gs_handle, DS3231_ALARM_2, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -781,19 +781,19 @@ uint8_t ds3231_register_test(void)
     
     /* alarm2 disable*/
     res = ds3231_set_alarm_interrupt(&gs_handle, DS3231_ALARM_2, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: alarm2 disable.\n");
     res = ds3231_get_alarm_interrupt(&gs_handle, DS3231_ALARM_2, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get alarm interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -804,19 +804,19 @@ uint8_t ds3231_register_test(void)
     
     /* set square wave pin */
     res = ds3231_set_pin(&gs_handle, DS3231_PIN_SQUARE_WAVE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set pin failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set square wave pin.\n");
     res = ds3231_get_pin(&gs_handle, &pin);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get pin failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -824,19 +824,19 @@ uint8_t ds3231_register_test(void)
     
     /* set interrupt pin */
     res = ds3231_set_pin(&gs_handle, DS3231_PIN_INTERRUPT);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set pin failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set interrupt pin.\n");
     res = ds3231_get_pin(&gs_handle, &pin);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get pin failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -847,19 +847,19 @@ uint8_t ds3231_register_test(void)
     
     /* enable */
     res = ds3231_set_square_wave(&gs_handle, DS3231_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set square wave failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set enable.\n");
     res = ds3231_get_square_wave(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get square wave failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -867,19 +867,19 @@ uint8_t ds3231_register_test(void)
     
     /* disable */
     res = ds3231_set_square_wave(&gs_handle, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set square wave failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set disable.\n");
     res = ds3231_get_square_wave(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get square wave failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -890,19 +890,19 @@ uint8_t ds3231_register_test(void)
     
     /* enable */
     res = ds3231_set_32khz_output(&gs_handle, DS3231_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set 32khz output failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: enable.\n");
     res = ds3231_get_32khz_output(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get 32khz output failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -910,19 +910,19 @@ uint8_t ds3231_register_test(void)
     
     /* disable */
     res = ds3231_set_32khz_output(&gs_handle, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set 32khz output failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: disable.\n");
     res = ds3231_get_32khz_output(&gs_handle, &enable);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get 32khz output failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -932,19 +932,19 @@ uint8_t ds3231_register_test(void)
     ds3231_interface_debug_print("ds3231: ds3231_set_aging_offset/ds3231_get_aging_offset test.\n");
     offset = -(rand() % 128);
     res = ds3231_set_aging_offset(&gs_handle, offset);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set aging offset failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: set offset %d.\n", offset);
     res = ds3231_get_aging_offset(&gs_handle, (int8_t *)&offset_check);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get aging offset failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -953,10 +953,10 @@ uint8_t ds3231_register_test(void)
     /* ds3231_get_status_offset */
     ds3231_interface_debug_print("ds3231: ds3231_get_status test.\n");
     res = ds3231_get_status(&gs_handle, (uint8_t *)&status);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get status failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -966,19 +966,19 @@ uint8_t ds3231_register_test(void)
     ds3231_interface_debug_print("ds3231: ds3231_aging_offset_convert_to_register/ds3231_aging_offset_convert_to_data test.\n");
     o = (float)(rand() % 100) /100.0f;
     res = ds3231_aging_offset_convert_to_register(&gs_handle, o, (int8_t *)&offset);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: aging offset convert to register failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     ds3231_interface_debug_print("ds3231: offset is %d.\n", offset);
     res = ds3231_aging_offset_convert_to_data(&gs_handle, offset, (float *)&o_check);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: aging offset convert to data failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -987,7 +987,7 @@ uint8_t ds3231_register_test(void)
     
     /* finish register test */
     ds3231_interface_debug_print("ds3231: finish register test.\n");
-    ds3231_deinit(&gs_handle);
+    (void)ds3231_deinit(&gs_handle);
     
     return 0;
 }

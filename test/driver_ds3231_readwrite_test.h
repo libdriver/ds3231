@@ -35,8 +35,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_DS3231_READWRITE_TEST_H_
-#define _DRIVER_DS3231_READWRITE_TEST_H_
+#ifndef DRIVER_DS3231_READWRITE_TEST_H
+#define DRIVER_DS3231_READWRITE_TEST_H
 
 #include "driver_ds3231_interface.h"
 

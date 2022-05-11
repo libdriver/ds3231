@@ -35,8 +35,8 @@
  * </table>
  */
   
-#ifndef _DRIVER_DS3231_ALARM_H_
-#define _DRIVER_DS3231_ALARM_H_
+#ifndef DRIVER_DS3231_ALARM_H
+#define DRIVER_DS3231_ALARM_H
 
 #include "driver_ds3231_interface.h"
 #include <time.h>
@@ -72,7 +72,7 @@ uint8_t ds3231_alarm_irq_handler(void);
  *            - 1 init failed
  * @note      none
  */
-uint8_t ds3231_alarm_init(uint8_t (*alarm_receive_callback)(uint8_t type));
+uint8_t ds3231_alarm_init(void (*alarm_receive_callback)(uint8_t type));
 
 /**
  * @brief  alarm example deinit
@@ -85,47 +85,47 @@ uint8_t ds3231_alarm_deinit(void);
 
 /**
  * @brief     alarm example set the alarm 1
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @param[in] mode is the alarm 1 interrupt mode
  * @return    status code
  *            - 0 success
  *            - 1 set alarm1 failed
  * @note      none
  */
-uint8_t ds3231_alarm_set_alarm1(ds3231_time_t *time, ds3231_alarm1_mode_t mode);
+uint8_t ds3231_alarm_set_alarm1(ds3231_time_t *t, ds3231_alarm1_mode_t mode);
 
 /**
  * @brief      alarm example get the alarm 1
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @param[out] *mode points to a alarm 1 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm1 failed
  * @note       none
  */
-uint8_t ds3231_alarm_get_alarm1(ds3231_time_t *time, ds3231_alarm1_mode_t *mode);
+uint8_t ds3231_alarm_get_alarm1(ds3231_time_t *t, ds3231_alarm1_mode_t *mode);
 
 /**
  * @brief     alarm example set the alarm 2
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @param[in] mode is the alarm 2 interrupt mode
  * @return    status code
  *            - 0 success
  *            - 1 set alarm2 failed
  * @note      none
  */
-uint8_t ds3231_alarm_set_alarm2(ds3231_time_t *time, ds3231_alarm2_mode_t mode);
+uint8_t ds3231_alarm_set_alarm2(ds3231_time_t *t, ds3231_alarm2_mode_t mode);
 
 /**
  * @brief      alarm example get the alarm 2
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @param[out] *mode points to a alarm 2 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm2 failed
  * @note       none
  */
-uint8_t ds3231_alarm_get_alarm2(ds3231_time_t *time, ds3231_alarm2_mode_t *mode);
+uint8_t ds3231_alarm_get_alarm2(ds3231_time_t *t, ds3231_alarm2_mode_t *mode);
 
 /**
  * @brief     alarm clear the interrupt flag
@@ -159,23 +159,23 @@ uint8_t ds3231_alarm_disable(ds3231_alarm_t alarm);
 
 /**
  * @brief     alarm example set the time
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @return    status code
  *            - 0 success
  *            - 1 set time failed
  * @note      none
  */
-uint8_t ds3231_alarm_set_time(ds3231_time_t *time);
+uint8_t ds3231_alarm_set_time(ds3231_time_t *t);
 
 /**
  * @brief      alarm example get the time
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @return     status code
  *             - 0 success
  *             - 1 get time failed
  * @note       none
  */
-uint8_t ds3231_alarm_get_time(ds3231_time_t *time);
+uint8_t ds3231_alarm_get_time(ds3231_time_t *t);
 
 /**
  * @brief     alarm example set the time by a unix timestamp
@@ -227,11 +227,15 @@ uint8_t ds3231_alarm_get_timestamp_time_zone(int8_t *zone);
 uint8_t ds3231_alarm_get_temperature(int16_t *raw, float *s);
 
 /**
- * @brief  alarm example get the ascii time
- * @return points to a ascii time buffer
- * @note   none
+ * @brief      alarm example get the ascii time
+ * @param[out] *buf points to an ascii buffer
+ * @param[in]  len is the data length
+ * @return     status code
+ *             - 0 success
+ *             - 1 read failed
+ * @note       none
  */
-char *ds3231_alarm_alarm_ascii_time(void);
+uint8_t ds3231_alarm_alarm_ascii_time(char *buf, uint8_t len);
 
 /**
  * @}

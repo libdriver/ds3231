@@ -50,9 +50,9 @@ static ds3231_handle_t gs_handle;        /**< ds3231 handle */
  */
 uint8_t ds3231_output_test(uint32_t times)
 {
-    volatile uint8_t res;
-    volatile uint32_t i;
-    volatile int8_t reg;
+    uint8_t res;
+    uint32_t i;
+    int8_t reg;
     ds3231_info_t info;
     
     /* link functions */
@@ -67,7 +67,7 @@ uint8_t ds3231_output_test(uint32_t times)
     
     /* get ds3231 info */
     res = ds3231_info(&info);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: get info failed.\n");
        
@@ -92,7 +92,7 @@ uint8_t ds3231_output_test(uint32_t times)
     
     /* init ds3231 */
     res = ds3231_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: init failed.\n");
         
@@ -101,80 +101,80 @@ uint8_t ds3231_output_test(uint32_t times)
     
     /* set oscillator */
     res = ds3231_set_oscillator(&gs_handle, DS3231_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set oscillator failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* disable alarm1 */
     res = ds3231_set_alarm_interrupt(&gs_handle, DS3231_ALARM_1, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* disable alarm2 */
     res = ds3231_set_alarm_interrupt(&gs_handle, DS3231_ALARM_2, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm2 interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set square wave */
     res = ds3231_set_pin(&gs_handle, DS3231_PIN_SQUARE_WAVE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set pin failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* disable square wave */
     res = ds3231_set_square_wave(&gs_handle, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set square wave failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* disable 32khz output */
     res = ds3231_set_32khz_output(&gs_handle, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set 32khz output failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* convert to register */
     res = ds3231_aging_offset_convert_to_register(&gs_handle, 0, (int8_t *)&reg);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: convert to register failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set aging offset */
     res = ds3231_set_aging_offset(&gs_handle, reg);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set aging offset failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -182,10 +182,10 @@ uint8_t ds3231_output_test(uint32_t times)
     
     /* enable square wave */
     res = ds3231_set_square_wave(&gs_handle, DS3231_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set square wave failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -197,10 +197,10 @@ uint8_t ds3231_output_test(uint32_t times)
     
     /* disable square wave */
     res = ds3231_set_square_wave(&gs_handle, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set square wave failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -209,10 +209,10 @@ uint8_t ds3231_output_test(uint32_t times)
     
     /* enable 32khz output */
     res = ds3231_set_32khz_output(&gs_handle, DS3231_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set 32khz output failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -224,10 +224,10 @@ uint8_t ds3231_output_test(uint32_t times)
     
     /* disable 32khz output */
     res = ds3231_set_32khz_output(&gs_handle, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set 32khz output failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -235,7 +235,7 @@ uint8_t ds3231_output_test(uint32_t times)
     
     /* finish output test */
     ds3231_interface_debug_print("ds3231: finish output test.\n");
-    ds3231_deinit(&gs_handle);
+    (void)ds3231_deinit(&gs_handle);
     
     return 0;
 }

@@ -87,9 +87,16 @@
  *            - 1 write failed
  * @note      none
  */
-static uint8_t _ds3231_iic_write(ds3231_handle_t *handle, uint8_t reg, uint8_t data)
+static uint8_t a_ds3231_iic_write(ds3231_handle_t *handle, uint8_t reg, uint8_t data)
 {
-    return handle->iic_write(DS3231_ADDRESS, reg, &data, 1);        /* write data */
+    if (handle->iic_write(DS3231_ADDRESS, reg, &data, 1) != 0)        /* write data */
+    {
+        return 1;                                                     /* return error */
+    }
+    else
+    {
+        return 0;                                                     /* success return 0 */
+    }
 }
 
 /**
@@ -103,9 +110,16 @@ static uint8_t _ds3231_iic_write(ds3231_handle_t *handle, uint8_t reg, uint8_t d
  *             - 1 read failed
  * @note       none
  */
-static uint8_t _ds3231_iic_multiple_read(ds3231_handle_t *handle, uint8_t reg, uint8_t *buf, uint8_t len)
+static uint8_t a_ds3231_iic_multiple_read(ds3231_handle_t *handle, uint8_t reg, uint8_t *buf, uint8_t len)
 {
-    return handle->iic_read(DS3231_ADDRESS, reg, buf, len);        /* read data */
+    if (handle->iic_read(DS3231_ADDRESS, reg, buf, len) != 0)        /* read data */
+    {
+        return 1;                                                    /* return error */
+    }
+    else
+    {                                                                /* success return 0 */
+        return 0;
+    }
 }
 
 /**
@@ -114,9 +128,9 @@ static uint8_t _ds3231_iic_multiple_read(ds3231_handle_t *handle, uint8_t reg, u
  * @return    bcd data
  * @note      none
  */
-static uint8_t _ds3231_hex2bcd(uint8_t val)
+static uint8_t a_ds3231_hex2bcd(uint8_t val)
 {
-    volatile uint8_t i, j, k;
+    uint8_t i, j, k;
     
     i = val / 10;            /* get tens place */
     j = val % 10;            /* get ones place */
@@ -131,9 +145,9 @@ static uint8_t _ds3231_hex2bcd(uint8_t val)
  * @return    hex data
  * @note      none
  */
-static uint8_t _ds3231_bcd2hex(uint8_t val)
+static uint8_t a_ds3231_bcd2hex(uint8_t val)
 {
-    volatile uint8_t temp;
+    uint8_t temp;
     
     temp = val & 0x0F;              /* get ones place */
     val = (val >> 4) & 0x0F;        /* get tens place */
@@ -146,7 +160,7 @@ static uint8_t _ds3231_bcd2hex(uint8_t val)
 /**
  * @brief     set the current time
  * @param[in] *handle points to a ds3231 handle structure
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @return    status code
  *            - 0 success
  *            - 1 set time failed
@@ -155,12 +169,12 @@ static uint8_t _ds3231_bcd2hex(uint8_t val)
  *            - 4 time is invalide
  * @note      none
  */
-uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *time)
+uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *t)
 {
-    volatile uint8_t res;
-    volatile uint8_t reg;
-    volatile uint8_t century;
-    volatile uint16_t year;
+    uint8_t res;
+    uint8_t reg;
+    uint8_t century;
+    uint16_t year;
     
     if (handle == NULL)                                                                                      /* check handle */
     {
@@ -170,96 +184,96 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *time)
     {
         return 3;                                                                                            /* return error */
     }
-    if (time == NULL)                                                                                        /* check time */
+    if (t == NULL)                                                                                           /* check time */
     {
         handle->debug_print("ds3231: time is null.\n");                                                      /* time is null */
         
         return 2;                                                                                            /* return error */
     }
-    if (time->format == DS3231_FORMAT_12H)                                                                   /* if 12H */
+    if (t->format == DS3231_FORMAT_12H)                                                                      /* if 12H */
     {
-        if ((time->year < 1990) || (time->year > 2190))                                                      /* check year */
+        if ((t->year < 1990) || (t->year > 2190))                                                            /* check year */
         {
             handle->debug_print("ds3231: year can't be over 2190 or less than 1990.\n");                     /* year can't be over 2190 or less than 1990 */
             
             return 4;                                                                                        /* return error */
         }
-        if ((time->month == 0) || (time->month > 12))                                                        /* check month */
+        if ((t->month == 0) || (t->month > 12))                                                              /* check month */
         {
             handle->debug_print("ds3231: month can't be zero or over than 12.\n");                           /* month can't be zero or over than 12 */
             
             return 4;                                                                                        /* return error */
         }
-        if ((time->week == 0) || (time->week > 7))                                                           /* check week */
+        if ((t->week == 0) || (t->week > 7))                                                                 /* check week */
         {
             handle->debug_print("ds3231: week can't be zero or over than 7.\n");                             /* week can't be zero or over than 7 */
             
             return 4;                                                                                        /* return error */
         }
-        if ((time->date == 0) || (time->date > 31))                                                          /* check data */
+        if ((t->date == 0) || (t->date > 31))                                                                /* check data */
         {
             handle->debug_print("ds3231: date can't be zero or over than 31.\n");                            /* date can't be zero or over than 31 */
             
             return 4;                                                                                        /* return error */
         }
-        if ((time->hour < 1) || (time->hour > 12))                                                           /* check hour */
+        if ((t->hour < 1) || (t->hour > 12))                                                                 /* check hour */
         {
             handle->debug_print("ds3231: hour can't be over than 12 or less 1.\n");                          /* hour can't be over than 12 or less 1 */
             
             return 4;                                                                                        /* return error */
         }
-        if (time->minute > 59)                                                                               /* check minute */
+        if (t->minute > 59)                                                                                  /* check minute */
         {
             handle->debug_print("ds3231: minute can't be over than 59.\n");                                  /* minute can't be over than 59 */
             
             return 4;                                                                                        /* return error */
         }
-        if (time->second > 59)                                                                               /* check second */
+        if (t->second > 59)                                                                                  /* check second */
         {
             handle->debug_print("ds3231: second can't be over than 59.\n");                                  /* second can't be over than 59 */
             
             return 4;                                                                                        /* return error */
         }
     }
-    else if (time->format == DS3231_FORMAT_24H)                                                              /* if 24H */
+    else if (t->format == DS3231_FORMAT_24H)                                                                 /* if 24H */
     {
-        if ((time->year < 1990) || (time->year > 2190))                                                      /* check year */
+        if ((t->year < 1990) || (t->year > 2190))                                                            /* check year */
         {
             handle->debug_print("ds3231: year can't be over 2190 or less than 1990.\n");                     /* year can't be over 2190 or less than 1990 */
             
             return 4;                                                                                        /* return error */
         }
-        if ((time->month == 0) || (time->month > 12))                                                        /* check month */
+        if ((t->month == 0) || (t->month > 12))                                                              /* check month */
         {
             handle->debug_print("ds3231: month can't be zero or over than 12.\n");                           /* month can't be zero or over than 12 */
             
             return 4;                                                                                        /* return error */
         }
-        if ((time->week == 0) || (time->week > 7))                                                           /* check week */
+        if ((t->week == 0) || (t->week > 7))                                                                 /* check week */
         {
             handle->debug_print("ds3231: week can't be zero or over than 7.\n");                             /* week can't be zero or over than 7 */
             
             return 4;                                                                                        /* return error */
         }
-        if ((time->date == 0) || (time->date > 31))                                                          /* check data */
+        if ((t->date == 0) || (t->date > 31))                                                                /* check data */
         {
             handle->debug_print("ds3231: date can't be zero or over than 31.\n");                            /* date can't be zero or over than 31 */
             
             return 4;                                                                                        /* return error */
         }
-        if (time->hour > 23)                                                                                 /* check hour */
+        if (t->hour > 23)                                                                                    /* check hour */
         {
             handle->debug_print("ds3231: hour can't be over than 23.\n");                                    /* hour can't be over than 23 */
             
             return 4;                                                                                        /* return error */
         }
-        if (time->minute > 59)                                                                               /* check minute */
+        if (t->minute > 59)                                                                                  /* check minute */
         {
             handle->debug_print("ds3231: minute can't be over than 59.\n");                                  /* minute can't be over than 59 */
             
             return 4;                                                                                        /* return error */
         }
-        if (time->second > 59)                                                                               /* check second */
+        if (t->second > 59)                                                                                  /* check second */
         {
             handle->debug_print("ds3231: second can't be over than 59.\n");                                  /* second can't be over than 59 */
             
@@ -273,50 +287,50 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *time)
         return 4;                                                                                            /* return error */
     }
     
-    res = _ds3231_iic_write(handle, DS3231_REG_SECOND, _ds3231_hex2bcd(time->second));                       /* write second */
-    if (res)                                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_SECOND, a_ds3231_hex2bcd(t->second));                        /* write second */
+    if (res != 0)                                                                                            /* check result */
     {
         handle->debug_print("ds3231: write second failed.\n");                                               /* write second failed */
         
         return 1;                                                                                            /* return error */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_MINUTE, _ds3231_hex2bcd(time->minute));                       /* write minute */
-    if (res)                                                                                                 /* check reuslt */
+    res = a_ds3231_iic_write(handle, DS3231_REG_MINUTE, a_ds3231_hex2bcd(t->minute));                        /* write minute */
+    if (res != 0)                                                                                            /* check reuslt */
     {
         handle->debug_print("ds3231: write minute failed.\n");                                               /* write minute failed */
         
         return 1;                                                                                            /* return error */
     }
-    if (time->format == DS3231_FORMAT_12H)                                                                   /* if 12H */
+    if (t->format == DS3231_FORMAT_12H)                                                                      /* if 12H */
     {
-        reg = (1 << 6) | (time->am_pm << 5) | _ds3231_hex2bcd(time->hour);                                   /* set hour in 12H */
+        reg = (uint8_t)((1 << 6) | (t->am_pm << 5) | a_ds3231_hex2bcd(t->hour));                             /* set hour in 12H */
     }
     else                                                                                                     /* if 24H */
     {
-        reg = (0 << 6) | _ds3231_hex2bcd(time->hour);                                                        /* set hour in 24H */
+        reg = (0 << 6) | a_ds3231_hex2bcd(t->hour);                                                          /* set hour in 24H */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_HOUR, reg);                                                   /* write hour */
-    if (res)                                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_HOUR, reg);                                                  /* write hour */
+    if (res != 0)                                                                                            /* check result */
     {
         handle->debug_print("ds3231: write hour failed.\n");                                                 /* write hour failed */
         
         return 1;                                                                                            /* return error */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_WEEK, _ds3231_hex2bcd(time->week));                           /* write week */
-    if (res)                                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_WEEK, a_ds3231_hex2bcd(t->week));                            /* write week */
+    if (res != 0)                                                                                            /* check result */
     {
         handle->debug_print("ds3231: write week failed.\n");                                                 /* write week failed */
         
         return 1;                                                                                            /* return error */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_DATE, _ds3231_hex2bcd(time->date));                           /* write data */
-    if (res)                                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_DATE, a_ds3231_hex2bcd(t->date));                            /* write data */
+    if (res != 0)                                                                                            /* check result */
     {
         handle->debug_print("ds3231: write date failed.\n");                                                 /* write date failed */
         
         return 1;                                                                                            /* return error */
     }
-    year = time->year - 1990;                                                                                /* year -1990 */
+    year = t->year - 1990;                                                                                   /* year -1990 */
     if (year >= 100)                                                                                         /* check year */
     {
         century = 1;                                                                                         /* set century */
@@ -326,15 +340,15 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *time)
     {
         century = 0;                                                                                         /* set century 0 */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_MONTH, _ds3231_hex2bcd(time->month) | (century << 7));        /* write month and century */
-    if (res)
+    res = a_ds3231_iic_write(handle, DS3231_REG_MONTH, a_ds3231_hex2bcd(t->month) | (century << 7));         /* write month and century */
+    if (res != 0)                                                                                            /* check result */
     {
         handle->debug_print("ds3231: write century and month failed.\n");                                    /* write century and month failed */
         
         return 1;                                                                                            /* return error */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_YEAR, _ds3231_hex2bcd(year));                                 /* write year */
-    if (res)                                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_YEAR, a_ds3231_hex2bcd((uint8_t)year));                      /* write year */
+    if (res != 0)                                                                                            /* check result */
     {
         handle->debug_print("ds3231: write year failed.\n");                                                 /* write year failed */
         
@@ -347,7 +361,7 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *time)
 /**
  * @brief      get the current time
  * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @return     status code
  *             - 0 success
  *             - 1 get time failed
@@ -355,11 +369,10 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *time)
  *             - 3 handle is not initialized
  * @note       none
  */
-uint8_t ds3231_get_time(ds3231_handle_t *handle, ds3231_time_t *time)
+uint8_t ds3231_get_time(ds3231_handle_t *handle, ds3231_time_t *t)
 {
-    volatile uint8_t res;
-    volatile uint8_t century;
-    volatile uint8_t buf[7];
+    uint8_t res;
+    uint8_t buf[7];
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -369,36 +382,37 @@ uint8_t ds3231_get_time(ds3231_handle_t *handle, ds3231_time_t *time)
     {
         return 3;                                                                         /* return error */
     }
-    if (time == NULL)                                                                     /* check time */
+    if (t == NULL)                                                                        /* check time */
     {
         handle->debug_print("ds3231: time is null.\n");                                   /* time is null */
         
         return 2;                                                                         /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_SECOND, (uint8_t *)buf, 7);        /* multiple_read */
-    if (res)                                                                              /* check result */
+    memset(buf, 0, sizeof(uint8_t) * 7);                                                  /* clear the buffer */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_SECOND, (uint8_t *)buf, 7);       /* multiple_read */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("ds3231: multiple read failed.\n");                           /* multiple read failed */
         
         return 1;                                                                         /* return error */
     }
-    time->year = _ds3231_bcd2hex(buf[6]) + 1990 + ((buf[5] >> 7) & 0x01) * 100;           /* get year */
-    time->month = _ds3231_bcd2hex(buf[5]&0x1F);                                           /* get month */
-    time->week = _ds3231_bcd2hex(buf[3]);                                                 /* get week */
-    time->date = _ds3231_bcd2hex(buf[4]);                                                 /* get date */
-    time->am_pm = (ds3231_am_pm_t)((buf[2] >> 5) & 0x01);                                 /* get am pm */
-    time->format = (ds3231_format_t)((buf[2] >> 6) & 0x01);                               /* get format */
-    if (time->format == DS3231_FORMAT_12H)                                                /* if 12H */
+    t->year = a_ds3231_bcd2hex(buf[6]) + 1990 + ((buf[5] >> 7) & 0x01) * 100;             /* get year */
+    t->month = a_ds3231_bcd2hex(buf[5]&0x1F);                                             /* get month */
+    t->week = a_ds3231_bcd2hex(buf[3]);                                                   /* get week */
+    t->date = a_ds3231_bcd2hex(buf[4]);                                                   /* get date */
+    t->am_pm = (ds3231_am_pm_t)((buf[2] >> 5) & 0x01);                                    /* get am pm */
+    t->format = (ds3231_format_t)((buf[2] >> 6) & 0x01);                                  /* get format */
+    if (t->format == DS3231_FORMAT_12H)                                                   /* if 12H */
     {
-        time->hour = _ds3231_bcd2hex(buf[2] & 0x1F);                                      /* get hour */
+        t->hour = a_ds3231_bcd2hex(buf[2] & 0x1F);                                        /* get hour */
     }
     else
     {
-        time->hour = _ds3231_bcd2hex(buf[2] & 0x3F);                                      /* get hour */
+        t->hour = a_ds3231_bcd2hex(buf[2] & 0x3F);                                        /* get hour */
     }
-    time->minute = _ds3231_bcd2hex(buf[1]);                                               /* get minute */
-    time->second = _ds3231_bcd2hex(buf[0]);                                               /* get second */
+    t->minute = a_ds3231_bcd2hex(buf[1]);                                                 /* get minute */
+    t->second = a_ds3231_bcd2hex(buf[0]);                                                 /* get second */
     
     return 0;                                                                             /* success return 0 */
 }
@@ -406,7 +420,7 @@ uint8_t ds3231_get_time(ds3231_handle_t *handle, ds3231_time_t *time)
 /**
  * @brief     set the alarm1 time
  * @param[in] *handle points to a ds3231 handle structure
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @param[in] mode is the alarm1 interrupt mode
  * @return    status code
  *            - 0 success
@@ -415,10 +429,10 @@ uint8_t ds3231_get_time(ds3231_handle_t *handle, ds3231_time_t *time)
  *            - 3 handle is not initialized
  * @note      none
  */
-uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_alarm1_mode_t mode)
+uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alarm1_mode_t mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t reg;
+    uint8_t res;
+    uint8_t reg;
     
     if (handle == NULL)                                                                                                            /* check handle */
     {
@@ -428,72 +442,72 @@ uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
     {
         return 3;                                                                                                                  /* return error */
     }
-    if (time == NULL)                                                                                                              /* check time */
+    if (t == NULL)                                                                                                                 /* check time */
     {
         handle->debug_print("ds3231: time is null.\n");                                                                            /* time is null */
         
         return 2;                                                                                                                  /* return error */
     }
-    if (time->format == DS3231_FORMAT_12H)                                                                                         /* if 12H */
+    if (t->format == DS3231_FORMAT_12H)                                                                                            /* if 12H */
     {
-        if ((time->week == 0) || (time->week > 7))                                                                                 /* check week */
+        if ((t->week == 0) || (t->week > 7))                                                                                       /* check week */
         {
             handle->debug_print("ds3231: week can't be zero or over than 7.\n");                                                   /* week can't be zero or over than 7 */
             
             return 1;                                                                                                              /* return error */
         }
-        if ((time->date == 0) || (time->date > 31))                                                                                /* check data */
+        if ((t->date == 0) || (t->date > 31))                                                                                      /* check data */
         {
             handle->debug_print("ds3231: date can't be zero or over than 31.\n");                                                  /* date can't be zero or over than 31 */
             
             return 1;                                                                                                              /* return error */
         }
-        if ((time->hour < 1) || (time->hour > 12))                                                                                 /* check hour */
+        if ((t->hour < 1) || (t->hour > 12))                                                                                       /* check hour */
         {
             handle->debug_print("ds3231: hour can't be over than 12 or less 1.\n");                                                /* hour can't be over than 12 or less 1 */
             
             return 1;                                                                                                              /* return error */
         }
-        if (time->minute > 59)                                                                                                     /* check minute */
+        if (t->minute > 59)                                                                                                        /* check minute */
         {
             handle->debug_print("ds3231: minute can't be over than 59.\n");                                                        /* minute can't be over than 59 */
             
             return 1;                                                                                                              /* return error */
         }
-        if (time->second > 59)                                                                                                     /* check second  */
+        if (t->second > 59)                                                                                                        /* check second  */
         {
             handle->debug_print("ds3231: second can't be over than 59.\n");                                                        /* second can't be over than 59 */
             
             return 1;                                                                                                              /* return error */
         }
     }
-    else if (time->format == DS3231_FORMAT_24H)                                                                                    /* if 24H */
+    else if (t->format == DS3231_FORMAT_24H)                                                                                       /* if 24H */
     {
-        if ((time->week == 0) || (time->week > 7))                                                                                 /* check week */
+        if ((t->week == 0) || (t->week > 7))                                                                                       /* check week */
         {
             handle->debug_print("ds3231: week can't be zero or over than 7.\n");                                                   /* week can't be zero or over than 7 */
             
             return 1;                                                                                                              /* return error */
         }
-        if ((time->date == 0) || (time->date > 31))                                                                                /* check data */
+        if ((t->date == 0) || (t->date > 31))                                                                                      /* check data */
         {
             handle->debug_print("ds3231: date can't be zero or over than 31.\n");                                                  /* date can't be zero or over than 31 */
             
             return 1;                                                                                                              /* return error */
         }
-        if (time->hour > 23)                                                                                                       /* check hour */
+        if (t->hour > 23)                                                                                                          /* check hour */
         {
             handle->debug_print("ds3231: hour can't be over than 23.\n");                                                          /* hour can't be over than 23 */
             
             return 1;                                                                                                              /* return error */
         }
-        if (time->minute > 59)                                                                                                     /* check minute */
+        if (t->minute > 59)                                                                                                        /* check minute */
         {
             handle->debug_print("ds3231: minute can't be over than 59.\n");                                                        /* minute can't be over than 59 */
             
             return 1;                                                                                                              /* return error */
         }
-        if (time->second > 59)                                                                                                     /* check second */
+        if (t->second > 59)                                                                                                        /* check second */
         {
             handle->debug_print("ds3231: second can't be over than 59.\n");                                                        /* second can't be over than 59 */
             
@@ -507,30 +521,30 @@ uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
         return 1;                                                                                                                  /* return error */
     }
     
-    res = _ds3231_iic_write(handle, DS3231_REG_ALARM1_SECOND, _ds3231_hex2bcd(time->second) | ((mode & 0x01) << 7));               /* write second */
-    if (res)                                                                                                                       /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_ALARM1_SECOND, a_ds3231_hex2bcd(t->second) | ((mode & 0x01) << 7));                /* write second */
+    if (res != 0)                                                                                                                  /* check result */
     {
         handle->debug_print("ds3231: write alarm1 second failed.\n");                                                              /* write alarm1 second failed */
         
         return 1;                                                                                                                  /* return error */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_ALARM1_MINUTE, _ds3231_hex2bcd(time->minute) | (((mode >> 1) & 0x01) << 7));        /* write minute */
-    if (res)                                                                                                                       /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_ALARM1_MINUTE, a_ds3231_hex2bcd(t->minute) | (((mode >> 1) & 0x01) << 7));         /* write minute */
+    if (res != 0)                                                                                                                  /* check result */
     {
         handle->debug_print("ds3231: write alarm1 minute failed.\n");                                                              /* write alarm1 minute failed */
         
         return 1;                                                                                                                  /* return error */
     }
-    if (time->format == DS3231_FORMAT_12H)                                                                                         /* if 12H */
+    if (t->format == DS3231_FORMAT_12H)                                                                                            /* if 12H */
     {
-        reg = (((mode >> 2) & 0x01) << 7) | (1 << 6) | (time->am_pm << 5) | _ds3231_hex2bcd(time->hour);                           /* set hour in 12H */
+        reg = (uint8_t)((((mode >> 2) & 0x01) << 7) | (1 << 6) | (t->am_pm << 5) | a_ds3231_hex2bcd(t->hour));                     /* set hour in 12H */
     }
     else                                                                                                                           /* if 24H */
     {
-        reg = (((mode >> 2) & 0x01) << 7) | _ds3231_hex2bcd(time->hour);                                                           /* set hour in 24H */
+        reg = (((mode >> 2) & 0x01) << 7) | a_ds3231_hex2bcd(t->hour);                                                             /* set hour in 24H */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_ALARM1_HOUR, reg);                                                                  /* write hour */
-    if (res)                                                                                                                       /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_ALARM1_HOUR, reg);                                                                 /* write hour */
+    if (res != 0)                                                                                                                  /* check result */
     {
         handle->debug_print("ds3231: write alarm1 hour failed.\n");                                                                /* write alarm1 hour failed */
         
@@ -538,14 +552,14 @@ uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
     }
     if (mode >= DS3231_ALARM1_MODE_WEEK_HOUR_MINUTE_SECOND_MATCH)                                                                  /* if week */
     {
-        reg = (((mode >> 3) & 0x01) << 7) | (1 << 6) | _ds3231_hex2bcd(time->week);                                                /* set data in week */
+        reg = (((mode >> 3) & 0x01) << 7) | (1 << 6) | a_ds3231_hex2bcd(t->week);                                                  /* set data in week */
     }
     else                                                                                                                           /* if day */
     {
-        reg = (((mode >> 3) & 0x01) << 7) | _ds3231_hex2bcd(time->date);                                                           /* set data in date */
+        reg = (((mode >> 3) & 0x01) << 7) | a_ds3231_hex2bcd(t->date);                                                             /* set data in date */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_ALARM1_WEEK, reg);                                                                  /* write week */
-    if (res)                                                                                                                       /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_ALARM1_WEEK, reg);                                                                 /* write week */
+    if (res != 0)                                                                                                                  /* check result */
     {
         handle->debug_print("ds3231: write alarm1 week failed.\n");                                                                /* write alarm1 week failed */
         
@@ -558,7 +572,7 @@ uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
 /**
  * @brief      get the alarm1 time
  * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @param[out] *mode points to a alarm1 interrupt mode buffer
  * @return     status code
  *             - 0 success
@@ -567,10 +581,10 @@ uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
  *             - 3 handle is not initialized
  * @note       none
  */
-uint8_t ds3231_get_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_alarm1_mode_t *mode)
+uint8_t ds3231_get_alarm1(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alarm1_mode_t *mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[4];
+    uint8_t res;
+    uint8_t buf[4];
     
     if (handle == NULL)                                                                                                                   /* check handle */
     {
@@ -580,44 +594,45 @@ uint8_t ds3231_get_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
     {
         return 3;                                                                                                                         /* return error */
     }
-    if (time == NULL)                                                                                                                     /* check time */
+    if (t == NULL)                                                                                                                        /* check time */
     {
         handle->debug_print("ds3231: time is null.\n");                                                                                   /* time is null */
         
         return 2;                                                                                                                         /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_ALARM1_SECOND, (uint8_t *)buf, 4);                                                 /* multiple_read */
-    if (res)                                                                                                                              /* check result */
+    memset(buf, 0, sizeof(uint8_t) * 4);                                                                                                  /* clear the buffer */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_ALARM1_SECOND, (uint8_t *)buf, 4);                                                /* multiple_read */
+    if (res != 0)                                                                                                                         /* check result */
     {
         handle->debug_print("ds3231: multiple read failed.\n");                                                                           /* multiple read failed */
         
         return 1;                                                                                                                         /* return error */
     }
-    time->year = 0;                                                                                                                       /* get year */
-    time->month = 0;                                                                                                                      /* get month */
-    if ((buf[3] >> 6) & 0x01)                                                                                                             /* if week */
+    t->year = 0;                                                                                                                          /* get year */
+    t->month = 0;                                                                                                                         /* get month */
+    if (((buf[3] >> 6) & 0x01) != 0)                                                                                                      /* if week */
     {
-        time->week = _ds3231_bcd2hex(buf[3] & 0x0F);                                                                                      /* get week */
-        time->date = 0;                                                                                                                   /* get data */
+        t->week = a_ds3231_bcd2hex(buf[3] & 0x0F);                                                                                        /* get week */
+        t->date = 0;                                                                                                                      /* get data */
     }
     else                                                                                                                                  /* if data */
     {
-        time->week = 0;                                                                                                                   /* get week */
-        time->date = _ds3231_bcd2hex(buf[3] & 0x3F);                                                                                      /* get data */
+        t->week = 0;                                                                                                                      /* get week */
+        t->date = a_ds3231_bcd2hex(buf[3] & 0x3F);                                                                                        /* get data */
     }
-    time->am_pm = (ds3231_am_pm_t)((buf[2] >> 5) & 0x01);                                                                                 /* get am pm */
-    time->format = (ds3231_format_t)((buf[2] >> 6) & 0x01);                                                                               /* get format */
-    if (time->format == DS3231_FORMAT_12H)                                                                                                /* if 12H */
+    t->am_pm = (ds3231_am_pm_t)((buf[2] >> 5) & 0x01);                                                                                    /* get am pm */
+    t->format = (ds3231_format_t)((buf[2] >> 6) & 0x01);                                                                                  /* get format */
+    if (t->format == DS3231_FORMAT_12H)                                                                                                   /* if 12H */
     {
-        time->hour = _ds3231_bcd2hex(buf[2]&0x1F);                                                                                        /* get hour */
+        t->hour = a_ds3231_bcd2hex(buf[2]&0x1F);                                                                                          /* get hour */
     }
     else                                                                                                                                  /* if 24H */
     {
-        time->hour = _ds3231_bcd2hex(buf[2]&0x3F);                                                                                        /* get hour */
+        t->hour = a_ds3231_bcd2hex(buf[2]&0x3F);                                                                                          /* get hour */
     }
-    time->minute = _ds3231_bcd2hex(buf[1] & 0x7F);                                                                                        /* get minute */
-    time->second = _ds3231_bcd2hex(buf[0] & 0x7F);                                                                                        /* get second */
+    t->minute = a_ds3231_bcd2hex(buf[1] & 0x7F);                                                                                          /* get minute */
+    t->second = a_ds3231_bcd2hex(buf[0] & 0x7F);                                                                                          /* get second */
     *mode = (ds3231_alarm1_mode_t)(((buf[0]>>7)&0x01)<<0 | ((buf[1]>>7)&0x01)<<1 | ((buf[2]>>7)&0x01)<<2 | ((buf[3]>>7)&0x01)<<3 |
                                    ((buf[3] >> 6)&0x01)<<4
                                   );                                                                                                      /* get mode */
@@ -628,7 +643,7 @@ uint8_t ds3231_get_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
 /**
  * @brief     set the alarm2 time
  * @param[in] *handle points to a ds3231 handle structure
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @param[in] mode is the alarm2 interrupt mode
  * @return    status code
  *            - 0 success
@@ -637,10 +652,10 @@ uint8_t ds3231_get_alarm1(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
  *            - 3 handle is not initialized
  * @note      none
  */
-uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_alarm2_mode_t mode)
+uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alarm2_mode_t mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t reg;
+    uint8_t res;
+    uint8_t reg;
     
     if (handle == NULL)                                                                                                            /* check handle */
     {
@@ -650,60 +665,60 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
     {
         return 3;                                                                                                                  /* return error */
     }
-    if (time == NULL)                                                                                                              /* check time */
+    if (t == NULL)                                                                                                                 /* check time */
     {
         handle->debug_print("ds3231: time is null.\n");                                                                            /* time is null */
         
         return 2;                                                                                                                  /* return error */
     }
-    if (time->format == DS3231_FORMAT_12H)                                                                                         /* if 12H */
+    if (t->format == DS3231_FORMAT_12H)                                                                                            /* if 12H */
     {
-        if ((time->week == 0) || (time->week > 7))                                                                                 /* check week */
+        if ((t->week == 0) || (t->week > 7))                                                                                       /* check week */
         {
             handle->debug_print("ds3231: week can't be zero or over than 7.\n");                                                   /* week can't be zero or over than 7 */
             
             return 1;                                                                                                              /* return error */
         }
-        if ((time->date == 0) || (time->date > 31))                                                                                /* check data */
+        if ((t->date == 0) || (t->date > 31))                                                                                      /* check data */
         {
             handle->debug_print("ds3231: date can't be zero or over than 31.\n");                                                  /* date can't be zero or over than 31 */
             
             return 1;                                                                                                              /* return error */
         }
-        if ((time->hour < 1) || (time->hour > 12))                                                                                 /* check hour */
+        if ((t->hour < 1) || (t->hour > 12))                                                                                       /* check hour */
         {
             handle->debug_print("ds3231: hour can't be over than 12 or less 1.\n");                                                /* hour can't be over than 12 or less 1 */
             
             return 1;                                                                                                              /* return error */
         }
-        if (time->minute > 59)                                                                                                     /* check minute */
+        if (t->minute > 59)                                                                                                        /* check minute */
         {
             handle->debug_print("ds3231: minute can't be over than 59.\n");                                                        /* minute can't be over than 59 */
             
             return 1;                                                                                                              /* return error */
         }
     }
-    else if (time->format == DS3231_FORMAT_24H)                                                                                    /* if 24H */
+    else if (t->format == DS3231_FORMAT_24H)                                                                                       /* if 24H */
     {
-        if ((time->week == 0) || (time->week > 7))                                                                                 /* check week */
+        if ((t->week == 0) || (t->week > 7))                                                                                       /* check week */
         {
             handle->debug_print("ds3231: week can't be zero or over than 7.\n");                                                   /* week can't be zero or over than 7 */
             
             return 1;                                                                                                              /* return error */
         }
-        if ((time->date == 0) || (time->date > 31))                                                                                /* check data */
+        if ((t->date == 0) || (t->date > 31))                                                                                      /* check data */
         {
             handle->debug_print("ds3231: date can't be zero or over than 31.\n");                                                  /* date can't be zero or over than 31 */
             
             return 1;                                                                                                              /* return error */
         }
-        if (time->hour > 23)                                                                                                       /* check hour */
+        if (t->hour > 23)                                                                                                          /* check hour */
         {
             handle->debug_print("ds3231: hour can't be over than 23.\n");                                                          /* hour can't be over than 23 */
             
             return 1;                                                                                                              /* return error */
         }
-        if (time->minute > 59)                                                                                                     /* check minute */
+        if (t->minute > 59)                                                                                                        /* check minute */
         {
             handle->debug_print("ds3231: minute can't be over than 59.\n");                                                        /* minute can't be over than 59 */
             
@@ -717,23 +732,23 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
         return 1;                                                                                                                  /* return error */
     }
     
-    res = _ds3231_iic_write(handle, DS3231_REG_ALARM2_MINUTE, _ds3231_hex2bcd(time->minute) | (((mode >> 0) & 0x01) << 7));        /* write minute */
-    if (res)                                                                                                                       /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_ALARM2_MINUTE, a_ds3231_hex2bcd(t->minute) | (((mode >> 0) & 0x01) << 7));         /* write minute */
+    if (res != 0)                                                                                                                  /* check result */
     {
         handle->debug_print("ds3231: write alarm2 minute failed.\n");                                                              /* write alarm2 minute failed */
         
         return 1;                                                                                                                  /* return error */
     }
-    if (time->format == DS3231_FORMAT_12H)                                                                                         /* if 12H */
+    if (t->format == DS3231_FORMAT_12H)                                                                                            /* if 12H */
     {
-        reg = (((mode >> 1) & 0x01) << 7) | (1 << 6) | (time->am_pm << 5) | _ds3231_hex2bcd(time->hour);                           /* set hour in 12H */
+        reg = (uint8_t)((((mode >> 1) & 0x01) << 7) | (1 << 6) | (t->am_pm << 5) | a_ds3231_hex2bcd(t->hour));                     /* set hour in 12H */
     }
     else                                                                                                                           /* if 24H */
     {
-        reg = (((mode >> 1) & 0x01) << 7) | _ds3231_hex2bcd(time->hour);                                                           /* set hour in 24H */
+        reg = (((mode >> 1) & 0x01) << 7) | a_ds3231_hex2bcd(t->hour);                                                             /* set hour in 24H */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_ALARM2_HOUR, reg);                                                                  /* write hour */
-    if (res)                                                                                                                       /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_ALARM2_HOUR, reg);                                                                 /* write hour */
+    if (res != 0)                                                                                                                  /* check result */
     {
         handle->debug_print("ds3231: write alarm2 hour failed.\n");                                                                /* write alarm2 hour failed */
         
@@ -741,14 +756,14 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
     }
     if (mode >= DS3231_ALARM1_MODE_WEEK_HOUR_MINUTE_SECOND_MATCH)                                                                  /* if week */
     {
-        reg = (((mode >> 2) & 0x01) << 7) | (1 << 6) | _ds3231_hex2bcd(time->week);                                                /* set data in week */
+        reg = (((mode >> 2) & 0x01) << 7) | (1 << 6) | a_ds3231_hex2bcd(t->week);                                                  /* set data in week */
     }
     else                                                                                                                           /* if day */
     {
-        reg = (((mode >> 2) & 0x01) << 7) | _ds3231_hex2bcd(time->date);                                                           /* set data in date */
+        reg = (((mode >> 2) & 0x01) << 7) | a_ds3231_hex2bcd(t->date);                                                             /* set data in date */
     }
-    res = _ds3231_iic_write(handle, DS3231_REG_ALARM2_WEEK, reg);                                                                  /* write week */
-    if (res)                                                                                                                       /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_ALARM2_WEEK, reg);                                                                 /* write week */
+    if (res != 0)                                                                                                                  /* check result */
     {
         handle->debug_print("ds3231: write alarm2 week failed.\n");                                                                /* write alarm2 week failed */
         
@@ -761,7 +776,7 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
 /**
  * @brief      get the alarm2 time
  * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @param[out] *mode points to a alarm2 interrupt mode buffer
  * @return     status code
  *             - 0 success
@@ -770,10 +785,10 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
  *             - 3 handle is not initialized
  * @note       none
  */
-uint8_t ds3231_get_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_alarm2_mode_t *mode)
+uint8_t ds3231_get_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alarm2_mode_t *mode)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[3];
+    uint8_t res;
+    uint8_t buf[3];
     
     if (handle == NULL)                                                                                                                   /* check handle */
     {
@@ -783,44 +798,45 @@ uint8_t ds3231_get_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
     {
         return 3;                                                                                                                         /* return error */
     }
-    if (time == NULL)                                                                                                                     /* check time */
+    if (t == NULL)                                                                                                                        /* check time */
     {
         handle->debug_print("ds3231: time is null.\n");                                                                                   /* time is null */
         
         return 2;                                                                                                                         /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_ALARM2_MINUTE, (uint8_t *)buf, 3);                                                 /* multiple read */
-    if (res)                                                                                                                              /* check result */
+    memset(buf, 0, sizeof(uint8_t) * 3);                                                                                                  /* clear the buffer */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_ALARM2_MINUTE, (uint8_t *)buf, 3);                                                /* multiple read */
+    if (res != 0)                                                                                                                         /* check result */
     {
         handle->debug_print("ds3231: multiple read failed.\n");                                                                           /* multiple read failed */
         
         return 1;                                                                                                                         /* return error */
     }
-    time->year = 0;                                                                                                                       /* get year */
-    time->month = 0;                                                                                                                      /* get month */
-    if ((buf[2] >> 6) & 0x01)                                                                                                             /* if week */
+    t->year = 0;                                                                                                                          /* get year */
+    t->month = 0;                                                                                                                         /* get month */
+    if (((buf[2] >> 6) & 0x01) != 0)                                                                                                      /* if week */
     {
-        time->week = _ds3231_bcd2hex(buf[2] & 0x0F);                                                                                      /* get week */
-        time->date = 0;                                                                                                                   /* get data */
+        t->week = a_ds3231_bcd2hex(buf[2] & 0x0F);                                                                                        /* get week */
+        t->date = 0;                                                                                                                      /* get data */
     }
     else                                                                                                                                  /* if data */
     {
-        time->week = 0;                                                                                                                   /* get week */
-        time->date = _ds3231_bcd2hex(buf[2] & 0x3F);                                                                                      /* get data */
+        t->week = 0;                                                                                                                      /* get week */
+        t->date = a_ds3231_bcd2hex(buf[2] & 0x3F);                                                                                        /* get data */
     }
-    time->am_pm = (ds3231_am_pm_t)((buf[1] >> 5) & 0x01);                                                                                 /* get am pm */
-    time->format = (ds3231_format_t)((buf[1] >> 6) & 0x01);                                                                               /* get format */
-    if (time->format == DS3231_FORMAT_12H)                                                                                                /* if 12H */
+    t->am_pm = (ds3231_am_pm_t)((buf[1] >> 5) & 0x01);                                                                                    /* get am pm */
+    t->format = (ds3231_format_t)((buf[1] >> 6) & 0x01);                                                                                  /* get format */
+    if (t->format == DS3231_FORMAT_12H)                                                                                                   /* if 12H */
     {
-        time->hour = _ds3231_bcd2hex(buf[1]&0x1F);                                                                                        /* get hour */
+        t->hour = a_ds3231_bcd2hex(buf[1]&0x1F);                                                                                          /* get hour */
     }
     else                                                                                                                                  /* if 24H */
     {
-        time->hour = _ds3231_bcd2hex(buf[1]&0x3F);                                                                                        /* get hour */
+        t->hour = a_ds3231_bcd2hex(buf[1]&0x3F);                                                                                          /* get hour */
     }
-    time->minute = _ds3231_bcd2hex(buf[0] & 0x7F);                                                                                        /* get minute */
-    time->second = 0;                                                                                                                     /* get second */
+    t->minute = a_ds3231_bcd2hex(buf[0] & 0x7F);                                                                                          /* get minute */
+    t->second = 0;                                                                                                                        /* get second */
     *mode = (ds3231_alarm2_mode_t)(((buf[0]>>7)&0x01)<<0 | ((buf[1]>>7)&0x01)<<1 | ((buf[2]>>7)&0x01)<<2 | ((buf[2]>>6)&0x01)<<4);        /* get mode */
     
     return 0;                                                                                                                             /* success return 0 */
@@ -839,8 +855,8 @@ uint8_t ds3231_get_alarm2(ds3231_handle_t *handle, ds3231_time_t *time, ds3231_a
  */
 uint8_t ds3231_set_oscillator(ds3231_handle_t *handle, ds3231_bool_t enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -851,8 +867,8 @@ uint8_t ds3231_set_oscillator(ds3231_handle_t *handle, ds3231_bool_t enable)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);        /* multiple read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);       /* multiple read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read control failed.\n");                               /* read control failed */
         
@@ -860,8 +876,8 @@ uint8_t ds3231_set_oscillator(ds3231_handle_t *handle, ds3231_bool_t enable)
     }
     prev &= ~ (1 << 7);                                                                      /* clear config */
     prev |= (!enable) << 7;                                                                  /* set enable */
-    res = _ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                               /* write control */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                              /* write control */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: write control failed.\n");                              /* write control failed */
         
@@ -884,8 +900,8 @@ uint8_t ds3231_set_oscillator(ds3231_handle_t *handle, ds3231_bool_t enable)
  */
 uint8_t ds3231_get_oscillator(ds3231_handle_t *handle, ds3231_bool_t *enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -896,8 +912,8 @@ uint8_t ds3231_get_oscillator(ds3231_handle_t *handle, ds3231_bool_t *enable)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);        /* multiple read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);       /* multiple read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read control failed.\n");                               /* read control failed */
         
@@ -922,8 +938,8 @@ uint8_t ds3231_get_oscillator(ds3231_handle_t *handle, ds3231_bool_t *enable)
  */
 uint8_t ds3231_set_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm, ds3231_bool_t enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -934,8 +950,8 @@ uint8_t ds3231_set_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);        /* multiple_read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);       /* multiple_read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read control failed.\n");                               /* read control failed */
         
@@ -943,8 +959,8 @@ uint8_t ds3231_set_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm
     }
     prev &= ~(1 << alarm);                                                                   /* clear config */
     prev |= enable << alarm;                                                                 /* set enable */
-    res = _ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                               /* write control */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                              /* write control */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: write control failed.\n");                              /* write control failed */
         
@@ -968,8 +984,8 @@ uint8_t ds3231_set_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm
  */
 uint8_t ds3231_get_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm, ds3231_bool_t *enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -980,8 +996,8 @@ uint8_t ds3231_get_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);        /* multiple_read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);       /* multiple_read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read control failed.\n");                               /* read control failed */
         
@@ -1005,8 +1021,8 @@ uint8_t ds3231_get_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm
  */
 uint8_t ds3231_set_pin(ds3231_handle_t *handle, ds3231_pin_t pin)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1017,8 +1033,8 @@ uint8_t ds3231_set_pin(ds3231_handle_t *handle, ds3231_pin_t pin)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);        /* multiple_read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);       /* multiple_read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read control failed.\n");                               /* read control failed */
         
@@ -1026,8 +1042,8 @@ uint8_t ds3231_set_pin(ds3231_handle_t *handle, ds3231_pin_t pin)
     }
     prev &= ~(1 << 2);                                                                       /* clear config */
     prev |= pin << 2;                                                                        /* set pin */
-    res = _ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                               /* write control */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                              /* write control */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: write control failed.\n");                              /* write control failed */
         
@@ -1050,8 +1066,8 @@ uint8_t ds3231_set_pin(ds3231_handle_t *handle, ds3231_pin_t pin)
  */
 uint8_t ds3231_get_pin(ds3231_handle_t *handle, ds3231_pin_t *pin)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1062,8 +1078,8 @@ uint8_t ds3231_get_pin(ds3231_handle_t *handle, ds3231_pin_t *pin)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);        /* multiple_read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);       /* multiple_read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read control failed.\n");                               /* read control failed */
         
@@ -1087,8 +1103,8 @@ uint8_t ds3231_get_pin(ds3231_handle_t *handle, ds3231_pin_t *pin)
  */
 uint8_t ds3231_set_square_wave(ds3231_handle_t *handle, ds3231_bool_t enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1099,8 +1115,8 @@ uint8_t ds3231_set_square_wave(ds3231_handle_t *handle, ds3231_bool_t enable)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);        /* multiple_read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);       /* multiple_read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read control failed.\n");                               /* read control failed */
         
@@ -1108,8 +1124,8 @@ uint8_t ds3231_set_square_wave(ds3231_handle_t *handle, ds3231_bool_t enable)
     }
     prev &= ~(1 << 6);                                                                       /* clear config */
     prev |= enable << 6;                                                                     /* set enable */
-    res = _ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                               /* write control */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                              /* write control */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: write control failed.\n");                              /* write control failed */
         
@@ -1132,8 +1148,8 @@ uint8_t ds3231_set_square_wave(ds3231_handle_t *handle, ds3231_bool_t enable)
  */
 uint8_t ds3231_get_square_wave(ds3231_handle_t *handle, ds3231_bool_t *enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1144,8 +1160,8 @@ uint8_t ds3231_get_square_wave(ds3231_handle_t *handle, ds3231_bool_t *enable)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);        /* multiple_read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);       /* multiple_read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read control failed.\n");                               /* read control failed */
         
@@ -1170,10 +1186,10 @@ uint8_t ds3231_get_square_wave(ds3231_handle_t *handle, ds3231_bool_t *enable)
  */
 uint8_t ds3231_get_temperature(ds3231_handle_t *handle, int16_t *raw, float *s)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
-    volatile uint32_t times;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t prev;
+    uint32_t times;
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                         /* check handle */
     {
@@ -1184,8 +1200,9 @@ uint8_t ds3231_get_temperature(ds3231_handle_t *handle, int16_t *raw, float *s)
         return 3;                                                                               /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);           /* multiple read */
-    if (res)                                                                                    /* check result */
+    memset(buf, 0, sizeof(uint8_t) * 2);                                                        /* clear the buffer */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_CONTROL, (uint8_t *)&prev, 1);          /* multiple read */
+    if (res != 0)                                                                               /* check result */
     {
         handle->debug_print("ds3231: read control failed.\n");                                  /* read control failed */
         
@@ -1193,19 +1210,19 @@ uint8_t ds3231_get_temperature(ds3231_handle_t *handle, int16_t *raw, float *s)
     }
     prev &= ~(1 << 5);                                                                          /* clear config */
     prev |= 1 << 5;                                                                             /* set enable */
-    res = _ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                                  /* write control */
-    if (res)                                                                                    /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_CONTROL, prev);                                 /* write control */
+    if (res != 0)                                                                               /* check result */
     {
         handle->debug_print("ds3231: write control failed.\n");                                 /* write control failed */
         
         return 1;                                                                               /* return error */
     }
     times = 500;                                                                                /* set 5s */
-    while (times)                                                                               /* check times */
+    while (times != 0)                                                                          /* check times */
     {
         handle->delay_ms(10);                                                                   /* delay 10 ms */
-        res = _ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);        /* read status */
-        if (res)                                                                                /* check result */
+        res = a_ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);       /* read status */
+        if (res != 0)                                                                           /* check result */
         {
             handle->debug_print("ds3231: read status failed.\n");                               /* read status failed */
             
@@ -1223,19 +1240,18 @@ uint8_t ds3231_get_temperature(ds3231_handle_t *handle, int16_t *raw, float *s)
         
         return 1;                                                                               /* return error */
     }
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_TEMPERATUREH, (uint8_t *)buf, 2);        /* read temperature */
-    if (res)                                                                                    /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_TEMPERATUREH, (uint8_t *)buf, 2);       /* read temperature */
+    if (res != 0)                                                                               /* check result */
     {
         handle->debug_print("ds3231: read temperature failed.\n");                              /* read temperature failed */
         
         return 1;                                                                               /* return error */
     }
-    *raw = (int16_t)(buf[0] << 8) | buf[1];                                                     /* set raw temperature */
+    *raw = (int16_t)(((uint16_t)buf[0]) << 8) | buf[1];                                         /* set raw temperature */
     *raw = (*raw) >> 6;                                                                         /* right shift */
-    if ((*raw) & 0x0200)                                                                        /* set negtive value */
+    if (((*raw) & 0x0200) != 0)                                                                 /* set negtive value */
     {
-        *raw = (*raw) | 0xFC00;                                                                 /* set negtive part */
-        *raw = - (~(*raw) + 1);                                                                 /* convert */
+        *raw = (*raw) | 0xFC00U;                                                                /* set negtive part */
     }
     *s = (float)(*raw) * 0.25f;                                                                 /* set converted temperature */
     
@@ -1255,7 +1271,7 @@ uint8_t ds3231_get_temperature(ds3231_handle_t *handle, int16_t *raw, float *s)
  */
 uint8_t ds3231_get_status(ds3231_handle_t *handle, uint8_t *status)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1266,8 +1282,8 @@ uint8_t ds3231_get_status(ds3231_handle_t *handle, uint8_t *status)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)status, 1);        /* multiple read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)status, 1);       /* multiple read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read status failed.\n");                                /* read status failed */
         
@@ -1290,7 +1306,7 @@ uint8_t ds3231_get_status(ds3231_handle_t *handle, uint8_t *status)
  */
 uint8_t ds3231_set_aging_offset(ds3231_handle_t *handle, int8_t offset)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                               /* check handle */
     {
@@ -1301,8 +1317,8 @@ uint8_t ds3231_set_aging_offset(ds3231_handle_t *handle, int8_t offset)
         return 3;                                                     /* return error */
     }
 
-    res = _ds3231_iic_write(handle, DS3231_REG_XTAL, offset);         /* write offset */
-    if (res)                                                          /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_XTAL, offset);        /* write offset */
+    if (res != 0)                                                     /* check result */
     {
         handle->debug_print("ds3231: write offset failed.\n");        /* write offset failed */
         
@@ -1325,7 +1341,7 @@ uint8_t ds3231_set_aging_offset(ds3231_handle_t *handle, int8_t offset)
  */
 uint8_t ds3231_get_aging_offset(ds3231_handle_t *handle, int8_t *offset)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     if (handle == NULL)                                                                    /* check handle */
     {
@@ -1336,8 +1352,8 @@ uint8_t ds3231_get_aging_offset(ds3231_handle_t *handle, int8_t *offset)
         return 3;                                                                          /* return error */
     }
 
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_XTAL, (uint8_t *)offset, 1);        /* read offset */
-    if (res)                                                                               /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_XTAL, (uint8_t *)offset, 1);       /* read offset */
+    if (res != 0)                                                                          /* check result */
     {
         handle->debug_print("ds3231: read offset failed.\n");                              /* read offset failed */
         
@@ -1413,7 +1429,7 @@ uint8_t ds3231_aging_offset_convert_to_data(ds3231_handle_t *handle, int8_t reg,
  */
 uint8_t ds3231_irq_handler(ds3231_handle_t *handle)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1424,23 +1440,23 @@ uint8_t ds3231_irq_handler(ds3231_handle_t *handle)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);         /* multiple read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);        /* multiple read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read status failed.\n");                                /* read status failed */
         
         return 1;                                                                            /* return error */
     }                                                                                        /* if oscillator stop */
-    if (prev & DS3231_STATUS_ALARM_2)                                                        /* if alarm 2 */
+    if ((prev & DS3231_STATUS_ALARM_2) != 0)                                                 /* if alarm 2 */
     {
-        if (handle->receive_callback)                                                        /* if receive callback */
+        if (handle->receive_callback != NULL)                                                /* if receive callback */
         {
             handle->receive_callback(DS3231_STATUS_ALARM_2);                                 /* run callback */
         }
     }
-    if (prev & DS3231_STATUS_ALARM_1)                                                        /* if alarm 1 */
+    if ((prev & DS3231_STATUS_ALARM_1) != 0)                                                 /* if alarm 1 */
     {
-        if (handle->receive_callback)                                                        /* if receive callback */
+        if (handle->receive_callback != NULL)                                                /* if receive callback */
         {
             handle->receive_callback(DS3231_STATUS_ALARM_1);                                 /* run callback */
         }
@@ -1461,8 +1477,8 @@ uint8_t ds3231_irq_handler(ds3231_handle_t *handle)
  */
 uint8_t ds3231_init(ds3231_handle_t *handle)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1509,26 +1525,26 @@ uint8_t ds3231_init(ds3231_handle_t *handle)
         return 3;                                                                            /* return error */
     }
     
-    if (handle->iic_init())                                                                  /* iic init */
+    if (handle->iic_init() != 0)                                                             /* iic init */
     {
         handle->debug_print("ds3231: iic init failed.\n");                                   /* iic init failed */
        
         return 1;                                                                            /* return error */
     }
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);         /* multiple_read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);        /* multiple_read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read status failed.\n");                                /* read status failed */
-        handle->iic_deinit();                                                                /* iic deinit */
+        (void)handle->iic_deinit();                                                          /* iic deinit */
         
         return 1;                                                                            /* return error */
     }
     prev &= ~(1 << 7);                                                                       /* clear config */
-    res = _ds3231_iic_write(handle, DS3231_REG_STATUS, prev);                                /* write status */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_STATUS, prev);                               /* write status */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: write status failed.\n");                               /* write status failed */
-        handle->iic_deinit();                                                                /* iic deinit */
+        (void)handle->iic_deinit();                                                          /* iic deinit */
         
         return 1;                                                                            /* return error */
     }
@@ -1558,7 +1574,7 @@ uint8_t ds3231_deinit(ds3231_handle_t *handle)
         return 3;                                                   /* return error */
     }
     
-    if (handle->iic_deinit())                                       /* iic deinit */
+    if (handle->iic_deinit() != 0)                                  /* iic deinit */
     {
         handle->debug_print("ds3231: iic deinit failed.\n");        /* iic deinit failed */
        
@@ -1582,8 +1598,8 @@ uint8_t ds3231_deinit(ds3231_handle_t *handle)
  */
 uint8_t ds3231_alarm_clear(ds3231_handle_t *handle, ds3231_alarm_t alarm)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1594,16 +1610,16 @@ uint8_t ds3231_alarm_clear(ds3231_handle_t *handle, ds3231_alarm_t alarm)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);         /* multiple_read  */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);        /* multiple_read  */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read status failed.\n");                                /* read status failed */
         
         return 1;                                                                            /* return error */
     }
     prev &= ~(1 << alarm);                                                                   /* clear config */
-    res = _ds3231_iic_write(handle, DS3231_REG_STATUS, prev);                                /* write status */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_STATUS, prev);                               /* write status */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: write status failed.\n");                               /* write status failed */
         
@@ -1626,8 +1642,8 @@ uint8_t ds3231_alarm_clear(ds3231_handle_t *handle, ds3231_alarm_t alarm)
  */
 uint8_t ds3231_set_32khz_output(ds3231_handle_t *handle, ds3231_bool_t enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1638,8 +1654,8 @@ uint8_t ds3231_set_32khz_output(ds3231_handle_t *handle, ds3231_bool_t enable)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);         /* multiple read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);        /* multiple read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read status failed.\n");                                /* read status failed */
         
@@ -1647,8 +1663,8 @@ uint8_t ds3231_set_32khz_output(ds3231_handle_t *handle, ds3231_bool_t enable)
     }
     prev &= ~(1 << 3);                                                                       /* clear config */
     prev |= enable << 3;                                                                     /* set enable */
-    res = _ds3231_iic_write(handle, DS3231_REG_STATUS, prev);                                /* write status */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_write(handle, DS3231_REG_STATUS, prev);                               /* write status */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: write status failed.\n");                               /* write status failed */
         
@@ -1671,8 +1687,8 @@ uint8_t ds3231_set_32khz_output(ds3231_handle_t *handle, ds3231_bool_t enable)
  */
 uint8_t ds3231_get_32khz_output(ds3231_handle_t *handle, ds3231_bool_t *enable)
 {
-    volatile uint8_t res;
-    volatile uint8_t prev;
+    uint8_t res;
+    uint8_t prev;
     
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -1683,8 +1699,8 @@ uint8_t ds3231_get_32khz_output(ds3231_handle_t *handle, ds3231_bool_t *enable)
         return 3;                                                                            /* return error */
     }
     
-    res = _ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);         /* multiple read */
-    if (res)                                                                                 /* check result */
+    res = a_ds3231_iic_multiple_read(handle, DS3231_REG_STATUS, (uint8_t *)&prev, 1);        /* multiple read */
+    if (res != 0)                                                                            /* check result */
     {
         handle->debug_print("ds3231: read status failed.\n");                                /* read status failed */
         
@@ -1710,16 +1726,23 @@ uint8_t ds3231_get_32khz_output(ds3231_handle_t *handle, ds3231_bool_t *enable)
  */
 uint8_t ds3231_set_reg(ds3231_handle_t *handle, uint8_t reg, uint8_t *buf, uint16_t len)
 {
-    if (handle == NULL)                                             //check handle
+    if (handle == NULL)                                               /* check handle */
     {
-        return 2;                                                   //return error
+        return 2;                                                     /* return error */
     }
-    if (handle->inited != 1)                                        //check handle initialization
+    if (handle->inited != 1)                                          /* check handle initialization */
     {
-        return 3;                                                   //return error
+        return 3;                                                     /* return error */
     }
     
-    return handle->iic_write(DS3231_ADDRESS, reg, buf, len);        //write data
+    if (handle->iic_write(DS3231_ADDRESS, reg, buf, len) != 0)        /* write data */
+    {
+        return 1;                                                     /* return error */
+    }
+    else
+    {
+        return 0;                                                     /* success return 0 */
+    }
 }
 
 /**
@@ -1737,16 +1760,23 @@ uint8_t ds3231_set_reg(ds3231_handle_t *handle, uint8_t reg, uint8_t *buf, uint1
  */
 uint8_t ds3231_get_reg(ds3231_handle_t *handle, uint8_t reg, uint8_t *buf, uint16_t len)
 {
-    if (handle == NULL)                                            /* check handle */
+    if (handle == NULL)                                              /* check handle */
     {
-        return 2;                                                  /* return error */
+        return 2;                                                    /* return error */
     }
-    if (handle->inited != 1)                                       /* check handle initialization */
+    if (handle->inited != 1)                                         /* check handle initialization */
     {
-        return 3;                                                  /* return error */
+        return 3;                                                    /* return error */
     }
     
-    return handle->iic_read(DS3231_ADDRESS, reg, buf, len);        /* read data */
+    if (handle->iic_read(DS3231_ADDRESS, reg, buf, len) != 0)        /* read data */
+    {
+        return 1;                                                    /* return error */
+    }
+    else
+    {
+        return 0;                                                    /* success return 0 */
+    }
 }
 
 /**

@@ -41,7 +41,6 @@
 #include "driver_ds3231_basic.h"
 #include "driver_ds3231_alarm.h"
 #include "driver_ds3231_output.h"
-#include "iic.h"
 #include "gpio.h"
 #include <stdlib.h>
 
@@ -53,24 +52,22 @@ uint8_t (*g_gpio_irq)(void) = NULL;        /**< gpio irq function address */
 /**
  * @brief     interface receive callback
  * @param[in] type is the interrupt type
- * @return    status code
- *            - 0 success
  * @note      none
  */
-static uint8_t _alarm_receive_callback(uint8_t type)
+static void a_alarm_receive_callback(uint8_t type)
 {
     switch (type)
     {
         case DS3231_STATUS_ALARM_2 :
         {
-            ds3231_alarm_clear_flag(DS3231_ALARM_2);
+            (void)ds3231_alarm_clear_flag(DS3231_ALARM_2);
             ds3231_interface_debug_print("ds3231: irq alarm2.\n");
             
             break;
         }
         case DS3231_STATUS_ALARM_1 :
         {
-            ds3231_alarm_clear_flag(DS3231_ALARM_1);
+            (void)ds3231_alarm_clear_flag(DS3231_ALARM_1);
             ds3231_interface_debug_print("ds3231: irq alarm1.\n");
             
             break;
@@ -80,8 +77,6 @@ static uint8_t _alarm_receive_callback(uint8_t type)
             break;
         }
     }
-        
-    return 0;
 }
 
 /**
@@ -186,7 +181,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             if (strcmp("reg", argv[2]) == 0)
             {
                 /* run reg test */
-                if (ds3231_register_test())
+                if (ds3231_register_test() != 0)
                 {
                     return 1;
                 }
@@ -199,7 +194,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             else if (strcmp("alarm", argv[2]) == 0)
             {
                 /* run alarm test */
-                if (ds3231_alarm_test())
+                if (ds3231_alarm_test() != 0)
                 {
                     return 1;
                 }
@@ -229,7 +224,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             if (strcmp("readwrite", argv[2]) == 0)
             {
                 /* run readwrite test */
-                if (ds3231_readwrite_test(atoi(argv[3])))
+                if (ds3231_readwrite_test(atoi(argv[3])) != 0)
                 {
                     return 1;
                 }
@@ -242,7 +237,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             else if (strcmp("output", argv[2]) == 0)
             {
                 /* run output test */
-                if (ds3231_output_test(atoi(argv[3])))
+                if (ds3231_output_test(atoi(argv[3])) != 0)
                 {
                     return 1;
                 }
@@ -268,7 +263,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
         /* run function */
         if (strcmp("-c", argv[1]) == 0)
         {
-            volatile uint8_t res;
+            uint8_t res;
             
             /* basic function */
             if (strcmp("basic", argv[2]) == 0)
@@ -280,14 +275,14 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         ds3231_time_t time;
                         
                         res = ds3231_basic_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_basic_get_time(&time);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_basic_deinit();
+                            (void)ds3231_basic_deinit();
                             
                             return 1;
                         }
@@ -305,29 +300,29 @@ uint8_t ds3231(uint8_t argc, char **argv)
                                                          time.hour, time.minute, time.second, time.week
                                                         );
                         }
-                        ds3231_basic_deinit();
+                        (void)ds3231_basic_deinit();
                         
                         return 0;
                     }
                     else if (strcmp("-temperature", argv[4]) == 0)
                     {
-                        volatile int16_t raw;
-                        volatile float s;
+                        int16_t raw;
+                        float s;
                         
                         res = ds3231_basic_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_basic_get_temperature((int16_t *)&raw, (float *)&s);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_basic_deinit();
+                            (void)ds3231_basic_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: temperature is %0.2fC.\n", s);
-                        ds3231_basic_deinit();
+                        (void)ds3231_basic_deinit();
                         
                         return 0;
                     }
@@ -353,14 +348,14 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         ds3231_time_t time;
                         
                         res = ds3231_alarm_init(ds3231_interface_receive_callback);
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_alarm_get_time(&time);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                             
                             return 1;
                         }
@@ -378,29 +373,29 @@ uint8_t ds3231(uint8_t argc, char **argv)
                                                          time.hour, time.minute, time.second, time.week
                                                         );
                         }
-                        ds3231_alarm_deinit();
+                        (void)ds3231_alarm_deinit();
                         
                         return 0;
                     }
                     else if (strcmp("-temperature", argv[4]) == 0)
                     {
-                        volatile int16_t raw;
-                        volatile float s;
+                        int16_t raw;
+                        float s;
                         
                         res = ds3231_alarm_init(ds3231_interface_receive_callback);
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_alarm_get_temperature((int16_t *)&raw, (float *)&s);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: temperature is %0.2fC.\n", s);
-                        ds3231_alarm_deinit();
+                        (void)ds3231_alarm_deinit();
                         
                         return 0;
                     }
@@ -410,14 +405,14 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         ds3231_alarm1_mode_t mode;
                         
                         res = ds3231_alarm_init(ds3231_interface_receive_callback);
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_alarm_get_alarm1(&time, &mode);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                             
                             return 1;
                         }
@@ -435,7 +430,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
                                                          time.hour, time.minute, time.second, time.week
                                                         );
                         }
-                        ds3231_alarm_deinit();
+                        (void)ds3231_alarm_deinit();
                         
                         return 0;
                     }
@@ -445,14 +440,14 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         ds3231_alarm2_mode_t mode;
                         
                         res = ds3231_alarm_init(ds3231_interface_receive_callback);
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_alarm_get_alarm2(&time, &mode);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                             
                             return 1;
                         }
@@ -470,7 +465,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
                                                          time.hour, time.minute, time.second, time.week
                                                         );
                         }
-                        ds3231_alarm_deinit();
+                        (void)ds3231_alarm_deinit();
                         
                         return 0;
                     }
@@ -496,14 +491,14 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         ds3231_time_t time;
                         
                         res = ds3231_output_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_output_get_time(&time);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_output_deinit();
+                            (void)ds3231_output_deinit();
                             
                             return 1;
                         }
@@ -521,29 +516,29 @@ uint8_t ds3231(uint8_t argc, char **argv)
                                                          time.hour, time.minute, time.second, time.week
                                                         );
                         }
-                        ds3231_output_deinit();
+                        (void)ds3231_output_deinit();
                         
                         return 0;
                     }
                     else if (strcmp("-temperature", argv[4]) == 0)
                     {
-                        volatile int16_t raw;
-                        volatile float s;
+                        int16_t raw;
+                        float s;
                         
                         res = ds3231_output_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_output_get_temperature((int16_t *)&raw, (float *)&s);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_output_deinit();
+                            (void)ds3231_output_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: temperature is %0.2fC.\n", s);
-                        ds3231_output_deinit();
+                        (void)ds3231_output_deinit();
                         
                         return 0;
                     }
@@ -552,19 +547,19 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         ds3231_bool_t enable;
                         
                         res = ds3231_output_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_output_get_square_wave(&enable);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_output_deinit();
+                            (void)ds3231_output_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: get 1Hz output %s.\n", (enable == DS3231_BOOL_TRUE) ? "enable" : "disable");
-                        ds3231_output_deinit();
+                        (void)ds3231_output_deinit();
                         
                         return 0;
                     }
@@ -573,19 +568,19 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         ds3231_bool_t enable;
                         
                         res = ds3231_output_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_output_get_32khz_output(&enable);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_output_deinit();
+                            (void)ds3231_output_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: get 32KHz output %s.\n", (enable == DS3231_BOOL_TRUE) ? "enable" : "disable");
-                        ds3231_output_deinit();
+                        (void)ds3231_output_deinit();
                         
                         return 0;
                     }
@@ -618,7 +613,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
         /* run function */
         if (strcmp("-c", argv[1]) == 0)
         {
-            volatile uint8_t res;
+            uint8_t res;
             
             /* basic function */
             if (strcmp("basic", argv[2]) == 0)
@@ -628,26 +623,26 @@ uint8_t ds3231(uint8_t argc, char **argv)
                     if (strcmp("-time", argv[4]) == 0)
                     {
                         res = ds3231_basic_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
-                        res = ds3231_basic_set_timestamp_time_zone(8);
-                        if (res)
+                        res = ds3231_basic_set_timestamp_time_zone(0);
+                        if (res != 0)
                         {
-                            ds3231_basic_deinit();
+                            (void)ds3231_basic_deinit();
                             
                             return 1;
                         }
                         res = ds3231_basic_set_timestamp((time_t)(atoi(argv[5])));
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_basic_deinit();
+                            (void)ds3231_basic_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: set timestamp %d.\n", (time_t)(atoi(argv[5])));
-                        ds3231_basic_deinit();
+                        (void)ds3231_basic_deinit();
                         
                         return 0;
                     }
@@ -671,34 +666,33 @@ uint8_t ds3231(uint8_t argc, char **argv)
                     if (strcmp("-time", argv[4]) == 0)
                     {
                         res = ds3231_alarm_init(ds3231_interface_receive_callback);
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
-                        res = ds3231_alarm_set_timestamp_time_zone(8);
-                        if (res)
+                        res = ds3231_alarm_set_timestamp_time_zone(0);
+                        if (res != 0)
                         {
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                             
                             return 1;
                         }
                         res = ds3231_alarm_set_timestamp((time_t)(atoi(argv[5])));
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: set timestamp %d.\n", (time_t)(atoi(argv[5])));
-                        ds3231_alarm_deinit();
+                        (void)ds3231_alarm_deinit();
                         
                         return 0;
                     }
                     else if (strcmp("-alarm1", argv[4]) == 0)
                     {
                         ds3231_bool_t enable;
-                        volatile uint32_t times = 3;
-
+                        
                         if (strcmp("enable", argv[5]) == 0)
                         {
                             enable = DS3231_BOOL_TRUE;
@@ -713,38 +707,25 @@ uint8_t ds3231(uint8_t argc, char **argv)
                             
                             return 5;
                         }
-                        res = ds3231_alarm_init(_alarm_receive_callback);
-                        if (res)
+                        res = ds3231_alarm_init(a_alarm_receive_callback);
+                        if (res != 0)
                         {
                             return 1;
                         }
-                        ds3231_interface_debug_print("ds3231: set alarm1 %s.\n", (enable == DS3231_BOOL_TRUE) ? "enable" : "disable");
                         if (enable == DS3231_BOOL_TRUE)
                         {
                             res = gpio_interrupt_init();
-                            if (res)
+                            if (res != 0)
                             {
-                                ds3231_alarm_deinit();
+                                (void)ds3231_alarm_deinit();
                                 
                                 return 1;
                             }
                             g_gpio_irq = ds3231_alarm_irq_handler;
                             res = ds3231_alarm_enable(DS3231_ALARM_1);
-                            if (res)
+                            if (res != 0)
                             {
-                                ds3231_alarm_deinit();
-                                
-                                return 1;
-                            }
-                            while (times)
-                            {
-                                sleep(1);
-                                times--;
-                            }
-                            res = gpio_interrupt_deinit();
-                            if (res)
-                            {
-                                ds3231_alarm_deinit();
+                                (void)ds3231_alarm_deinit();
                                 
                                 return 1;
                             }
@@ -752,23 +733,30 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         else
                         {
                             res = ds3231_alarm_disable(DS3231_ALARM_1);
-                            if (res)
+                            if (res != 0)
                             {
-                                ds3231_alarm_deinit();
+                                (void)ds3231_alarm_deinit();
+                                
+                                return 1;
+                            }
+                            res = gpio_interrupt_deinit();
+                            if (res != 0)
+                            {
+                                (void)ds3231_alarm_deinit();
                                 
                                 return 1;
                             }
                             g_gpio_irq = NULL;
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                         }
+                        ds3231_interface_debug_print("ds3231: set alarm1 %s.\n", (enable == DS3231_BOOL_TRUE) ? "enable" : "disable");
 
                         return 0;
                     }
                     else if (strcmp("-alarm2", argv[4]) == 0)
                     {
                         ds3231_bool_t enable;
-                        volatile uint32_t times = 61;
-
+                        
                         if (strcmp("enable", argv[5]) == 0)
                         {
                             enable = DS3231_BOOL_TRUE;
@@ -783,38 +771,25 @@ uint8_t ds3231(uint8_t argc, char **argv)
                             
                             return 5;
                         }
-                        res = ds3231_alarm_init(_alarm_receive_callback);
-                        if (res)
+                        res = ds3231_alarm_init(a_alarm_receive_callback);
+                        if (res != 0)
                         {
                             return 1;
                         }
-                        ds3231_interface_debug_print("ds3231: set alarm2 %s.\n", (enable == DS3231_BOOL_TRUE) ? "enable" : "disable");
                         if (enable == DS3231_BOOL_TRUE)
                         {
                             res = gpio_interrupt_init();
-                            if (res)
+                            if (res != 0)
                             {
-                                ds3231_alarm_deinit();
+                                (void)ds3231_alarm_deinit();
                                 
                                 return 1;
                             }
                             g_gpio_irq = ds3231_alarm_irq_handler;
                             res = ds3231_alarm_enable(DS3231_ALARM_2);
-                            if (res)
+                            if (res != 0)
                             {
-                                ds3231_alarm_deinit();
-                                
-                                return 1;
-                            }
-                            while (times)
-                            {
-                                sleep(1);
-                                times--;
-                            }
-                            res = gpio_interrupt_deinit();
-                            if (res)
-                            {
-                                ds3231_alarm_deinit();
+                                (void)ds3231_alarm_deinit();
                                 
                                 return 1;
                             }
@@ -822,15 +797,23 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         else
                         {
                             res = ds3231_alarm_disable(DS3231_ALARM_2);
-                            if (res)
+                            if (res != 0)
                             {
-                                ds3231_alarm_deinit();
+                                (void)ds3231_alarm_deinit();
+                                
+                                return 1;
+                            }
+                            res = gpio_interrupt_deinit();
+                            if (res != 0)
+                            {
+                                (void)ds3231_alarm_deinit();
                                 
                                 return 1;
                             }
                             g_gpio_irq = NULL;
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                         }
+                        ds3231_interface_debug_print("ds3231: set alarm2 %s.\n", (enable == DS3231_BOOL_TRUE) ? "enable" : "disable");
 
                         return 0;
                     }
@@ -854,26 +837,26 @@ uint8_t ds3231(uint8_t argc, char **argv)
                     if (strcmp("-time", argv[4]) == 0)
                     {
                         res = ds3231_output_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
-                        res = ds3231_output_set_timestamp_time_zone(8);
-                        if (res)
+                        res = ds3231_output_set_timestamp_time_zone(0);
+                        if (res != 0)
                         {
-                            ds3231_output_deinit();
+                            (void)ds3231_output_deinit();
                             
                             return 1;
                         }
                         res = ds3231_output_set_timestamp((time_t)(atoi(argv[5])));
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_output_deinit();
+                            (void)ds3231_output_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: set timestamp %d.\n", (time_t)(atoi(argv[5])));
-                        ds3231_output_deinit();
+                        (void)ds3231_output_deinit();
                         
                         return 0;
                     }
@@ -896,19 +879,19 @@ uint8_t ds3231(uint8_t argc, char **argv)
                             return 5;
                         }
                         res = ds3231_output_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_output_set_square_wave(enable);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_output_deinit();
+                            (void)ds3231_output_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: set 1Hz output %s.\n", (enable == DS3231_BOOL_TRUE) ? "enable" : "disable");
-                        ds3231_output_deinit();
+                        (void)ds3231_output_deinit();
                         
                         return 0;
                     }
@@ -931,19 +914,19 @@ uint8_t ds3231(uint8_t argc, char **argv)
                             return 5;
                         }
                         res = ds3231_output_init();
-                        if (res)
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_output_set_32khz_output(enable);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_output_deinit();
+                            (void)ds3231_output_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: set 32KHz output %s.\n", (enable == DS3231_BOOL_TRUE) ? "enable" : "disable");
-                        ds3231_output_deinit();
+                        (void)ds3231_output_deinit();
                         
                         return 0;
                     }
@@ -976,7 +959,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
         /* run function */
         if (strcmp("-c", argv[1]) == 0)
         {
-            volatile uint8_t res;
+            uint8_t res;
             
             /* alarm function */
             if (strcmp("alarm", argv[2]) == 0)
@@ -1029,35 +1012,35 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         timestamp += 8 * 3600;
                         timeptr = localtime(&timestamp);
                         time.am_pm = DS3231_AM;
-                        time.date = timeptr->tm_mday;
+                        time.date = (uint8_t)timeptr->tm_mday;
                         time.format = DS3231_FORMAT_24H;
-                        time.hour = timeptr->tm_hour;
-                        time.minute = timeptr->tm_min;
-                        time.month = timeptr->tm_mon + 1;
-                        time.second = timeptr->tm_sec;
+                        time.hour = (uint8_t)timeptr->tm_hour;
+                        time.minute = (uint8_t)timeptr->tm_min;
+                        time.month = (uint8_t)(timeptr->tm_mon + 1);
+                        time.second = (uint8_t)timeptr->tm_sec;
                         if (timeptr->tm_wday == 0)
                         {
                             time.week  = 7;
                         }
                         else
                         {
-                            time.week = timeptr->tm_wday;
+                            time.week = (uint8_t)timeptr->tm_wday;
                         }
-                        time.year = timeptr->tm_year + 1900;
-                        res = ds3231_alarm_init(_alarm_receive_callback);
-                        if (res)
+                        time.year = (uint16_t)(timeptr->tm_year + 1900);
+                        res = ds3231_alarm_init(a_alarm_receive_callback);
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_alarm_set_alarm1(&time, mode);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: set alarm1 timestamp %d mode %s.\n", timestamp, argv[7]);
-                        ds3231_alarm_deinit();
+                        (void)ds3231_alarm_deinit();
                         
                         return 0;
                     }
@@ -1103,35 +1086,35 @@ uint8_t ds3231(uint8_t argc, char **argv)
                         timestamp += 8 * 3600;
                         timeptr = localtime(&timestamp);
                         time.am_pm = DS3231_AM;
-                        time.date = timeptr->tm_mday;
+                        time.date = (uint8_t)timeptr->tm_mday;
                         time.format = DS3231_FORMAT_24H;
-                        time.hour = timeptr->tm_hour;
-                        time.minute = timeptr->tm_min;
-                        time.month = timeptr->tm_mon + 1;
-                        time.second = timeptr->tm_sec;
+                        time.hour = (uint8_t)timeptr->tm_hour;
+                        time.minute = (uint8_t)timeptr->tm_min;
+                        time.month = (uint8_t)(timeptr->tm_mon + 1);
+                        time.second = (uint8_t)timeptr->tm_sec;
                         if (timeptr->tm_wday == 0)
                         {
                             time.week  = 7;
                         }
                         else
                         {
-                            time.week = timeptr->tm_wday;
+                            time.week = (uint8_t)timeptr->tm_wday;
                         }
-                        time.year = timeptr->tm_year + 1900;
-                        res = ds3231_alarm_init(_alarm_receive_callback);
-                        if (res)
+                        time.year = (uint16_t)(timeptr->tm_year + 1900);
+                        res = ds3231_alarm_init(a_alarm_receive_callback);
+                        if (res != 0)
                         {
                             return 1;
                         }
                         res = ds3231_alarm_set_alarm2(&time, mode);
-                        if (res)
+                        if (res != 0)
                         {
-                            ds3231_alarm_deinit();
+                            (void)ds3231_alarm_deinit();
                             
                             return 1;
                         }
                         ds3231_interface_debug_print("ds3231: set alarm2 timestamp %d mode %s.\n", timestamp, argv[7]);
-                        ds3231_alarm_deinit();
+                        (void)ds3231_alarm_deinit();
                         
                         return 0;
                     }
