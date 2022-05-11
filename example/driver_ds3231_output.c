@@ -49,8 +49,8 @@ static int8_t gs_time_zone = 0;          /**< local zone */
  */
 uint8_t ds3231_output_init(void)
 {
-    volatile uint8_t res;
-    volatile int8_t reg;
+    uint8_t res;
+    int8_t reg;
     
     /* link functions */
     DRIVER_DS3231_LINK_INIT(&gs_handle, ds3231_handle_t);
@@ -64,7 +64,7 @@ uint8_t ds3231_output_init(void)
 
     /* init ds3231 */
     res = ds3231_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: init failed.\n");
         
@@ -73,60 +73,60 @@ uint8_t ds3231_output_init(void)
     
     /* set oscillator */
     res = ds3231_set_oscillator(&gs_handle, DS3231_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set oscillator failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* disable alarm1 */
     res = ds3231_set_alarm_interrupt(&gs_handle, DS3231_ALARM_1, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm1 interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* disable alarm2 */
     res = ds3231_set_alarm_interrupt(&gs_handle, DS3231_ALARM_2, DS3231_BOOL_FALSE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set alarm2 interrupt failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set square wave */
     res = ds3231_set_pin(&gs_handle, DS3231_PIN_SQUARE_WAVE);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set pin failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* convert to register */
     res = ds3231_aging_offset_convert_to_register(&gs_handle, DS3231_OUTPUT_DEFAULT_AGING_OFFSET, (int8_t *)&reg);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: convert to register failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set aging offset */
     res = ds3231_set_aging_offset(&gs_handle, reg);
-    if (res)
+    if (res != 0)
     {
         ds3231_interface_debug_print("ds3231: set aging offset failed.\n");
-        ds3231_deinit(&gs_handle);
+        (void)ds3231_deinit(&gs_handle);
         
         return 1;
     }
@@ -143,7 +143,7 @@ uint8_t ds3231_output_init(void)
  */
 uint8_t ds3231_output_deinit(void)
 {
-    if (ds3231_deinit(&gs_handle))
+    if (ds3231_deinit(&gs_handle) != 0)
     {
         return 1;
     }
@@ -155,16 +155,16 @@ uint8_t ds3231_output_deinit(void)
 
 /**
  * @brief     output example set the time
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @return    status code
  *            - 0 success
  *            - 1 set time failed
  * @note      none
  */
-uint8_t ds3231_output_set_time(ds3231_time_t *time)
+uint8_t ds3231_output_set_time(ds3231_time_t *t)
 {
     /* set time */
-    if (ds3231_set_time(&gs_handle, time))
+    if (ds3231_set_time(&gs_handle, t) != 0)
     {
         return 1;
     }
@@ -184,31 +184,31 @@ uint8_t ds3231_output_set_time(ds3231_time_t *time)
  */
 uint8_t ds3231_output_set_timestamp(time_t timestamp)
 {
-    ds3231_time_t time;
+    ds3231_time_t t;
     struct tm *timeptr;
     
     /* convert times */
-    timestamp += gs_time_zone * 3600;
+    timestamp += (time_t)(gs_time_zone * 3600);
     timeptr = localtime(&timestamp);
-    time.am_pm = DS3231_AM;
-    time.date = timeptr->tm_mday;
-    time.format = DS3231_FORMAT_24H;
-    time.hour = timeptr->tm_hour;
-    time.minute = timeptr->tm_min;
-    time.month = timeptr->tm_mon + 1;
-    time.second = timeptr->tm_sec;
+    t.am_pm = DS3231_AM;
+    t.date = (uint8_t)timeptr->tm_mday;
+    t.format = DS3231_FORMAT_24H;
+    t.hour = (uint8_t)timeptr->tm_hour;
+    t.minute = (uint8_t)timeptr->tm_min;
+    t.month = (uint8_t)timeptr->tm_mon + 1;
+    t.second = (uint8_t)timeptr->tm_sec;
     if (timeptr->tm_wday == 0)
     {
-        time.week  = 7;
+        t.week  = 7;
     }
     else
     {
-        time.week = timeptr->tm_wday;
+        t.week = (uint8_t)timeptr->tm_wday;
     }
-    time.year = timeptr->tm_year + 1900;
+    t.year = (uint16_t)(timeptr->tm_year + 1900);
     
     /* set time */
-    if (ds3231_set_time(&gs_handle, &time))
+    if (ds3231_set_time(&gs_handle, &t) != 0)
     {
         return 1;
     }
@@ -234,16 +234,16 @@ uint8_t ds3231_output_set_timestamp_time_zone(int8_t zone)
 
 /**
  * @brief      output example get the time
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @return     status code
  *             - 0 success
  *             - 1 get time failed
  * @note       none
  */
-uint8_t ds3231_output_get_time(ds3231_time_t *time)
+uint8_t ds3231_output_get_time(ds3231_time_t *t)
 {
     /* get time */
-    if (ds3231_get_time(&gs_handle, time))
+    if (ds3231_get_time(&gs_handle, t) != 0)
     {
         return 1;
     }
@@ -263,28 +263,28 @@ uint8_t ds3231_output_get_time(ds3231_time_t *time)
  */
 uint8_t ds3231_output_get_timestamp(time_t *timestamp)
 {
-    ds3231_time_t time;
+    ds3231_time_t t;
     struct tm timeptr;
     
     /* get time */
-    if (ds3231_get_time(&gs_handle, &time))
+    if (ds3231_get_time(&gs_handle, &t) != 0)
     {
         return 1;
     }
-    timeptr.tm_year = time.year - 1900;
-    timeptr.tm_mon = time.month - 1;
-    timeptr.tm_wday = time.week; 
-    timeptr.tm_mday = time.date;
-    if (time.format == DS3231_FORMAT_24H)
+    timeptr.tm_year = t.year - 1900;
+    timeptr.tm_mon = t.month - 1;
+    timeptr.tm_wday = t.week; 
+    timeptr.tm_mday = t.date;
+    if (t.format == DS3231_FORMAT_24H)
     {
-        timeptr.tm_hour = time.hour;
+        timeptr.tm_hour = t.hour;
     }
     else
     {
-        timeptr.tm_hour = time.hour % 12 + time.am_pm * 12;
+        timeptr.tm_hour = t.hour % 12 + t.am_pm * 12;
     }
-    timeptr.tm_min = time.minute;
-    timeptr.tm_sec = time.second;
+    timeptr.tm_min = t.minute;
+    timeptr.tm_sec = t.second;
     
     /* make time */
     *timestamp = mktime(&timeptr) - gs_time_zone * 3600;
@@ -318,7 +318,7 @@ uint8_t ds3231_output_get_timestamp_time_zone(int8_t *zone)
 uint8_t ds3231_output_get_temperature(int16_t *raw, float *s)
 {
     /* get temperature */
-    if (ds3231_get_temperature(&gs_handle, raw, s))
+    if (ds3231_get_temperature(&gs_handle, raw, s) != 0)
     {
         return 1;
     }
@@ -329,37 +329,36 @@ uint8_t ds3231_output_get_temperature(int16_t *raw, float *s)
 }
 
 /**
- * @brief  output example get the ascii time
- * @return points to a ascii time buffer
- * @note   none
+ * @brief      output example get the ascii time
+ * @param[out] *buf points to an ascii buffer
+ * @param[in]  len is the data length
+ * @return     status code
+ *             - 0 success
+ *             - 1 read failed
+ * @note       none
  */
-char *ds3231_output_get_ascii_time(void)
+uint8_t ds3231_output_get_ascii_time(char *buf, uint8_t len)
 {
-    ds3231_time_t time;
-    struct tm timeptr;
+    ds3231_time_t t;
     
     /* get time */
-    if (ds3231_get_time(&gs_handle, &time))
+    if (ds3231_get_time(&gs_handle, &t) != 0)
     {
-        return NULL;
+        return 1;
     }
-    timeptr.tm_year = time.year - 1900;
-    timeptr.tm_mon = time.month - 1;
-    timeptr.tm_wday = time.week; 
-    timeptr.tm_mday = time.date;
-    if (time.format == DS3231_FORMAT_24H)
+    
+    if (t.format == DS3231_FORMAT_24H)
     {
-        timeptr.tm_hour = time.hour;
+        (void)snprintf(buf, len, "%04d-%02d-%02d %02d:%02d:%02d %d.\n", t.year, t.month, t.date, t.hour, t.minute, t.second, t.week);
     }
     else
     {
-        timeptr.tm_hour = time.hour % 12 + time.am_pm * 12;
+        (void)snprintf(buf, len, "%04d-%02d-%02d %s %02d:%02d:%02d %d.\n", t.year, t.month, t.date, (t.am_pm == DS3231_AM) ? "AM" : "PM",
+                       t.hour, t.minute, t.second, t.week
+                      );
     }
-    timeptr.tm_min = time.minute;
-    timeptr.tm_sec = time.second;
     
-    /* convert to ascii time */
-    return asctime((const struct tm *)&timeptr);
+    return 0;
 }
 
 /**
@@ -373,7 +372,7 @@ char *ds3231_output_get_ascii_time(void)
 uint8_t ds3231_output_set_square_wave(ds3231_bool_t enable)
 {
     /* set square wave */
-    if (ds3231_set_square_wave(&gs_handle, enable))
+    if (ds3231_set_square_wave(&gs_handle, enable) != 0)
     {
         return 1;
     }
@@ -394,7 +393,7 @@ uint8_t ds3231_output_set_square_wave(ds3231_bool_t enable)
 uint8_t ds3231_output_get_square_wave(ds3231_bool_t *enable)
 {
     /* get square wave */
-    if (ds3231_get_square_wave(&gs_handle, enable))
+    if (ds3231_get_square_wave(&gs_handle, enable) != 0)
     {
         return 1;
     }
@@ -415,7 +414,7 @@ uint8_t ds3231_output_get_square_wave(ds3231_bool_t *enable)
 uint8_t ds3231_output_set_32khz_output(ds3231_bool_t enable)
 {
     /* set 32khz_output */
-    if (ds3231_set_32khz_output(&gs_handle, enable))
+    if (ds3231_set_32khz_output(&gs_handle, enable) != 0)
     {
         return 1;
     }
@@ -436,7 +435,7 @@ uint8_t ds3231_output_set_32khz_output(ds3231_bool_t enable)
 uint8_t ds3231_output_get_32khz_output(ds3231_bool_t *enable)
 {
     /* get 32khz_output */
-    if (ds3231_get_32khz_output(&gs_handle, enable))
+    if (ds3231_get_32khz_output(&gs_handle, enable) != 0)
     {
         return 1;
     }

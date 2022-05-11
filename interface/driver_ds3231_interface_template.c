@@ -106,22 +106,19 @@ void ds3231_interface_delay_ms(uint32_t ms)
 /**
  * @brief     interface print format data
  * @param[in] fmt is the format data
- * @return    length of the send data
  * @note      none
  */
-uint16_t ds3231_interface_debug_print(char *fmt, ...)
+void ds3231_interface_debug_print(const char *const fmt, ...)
 {
-    return 0;
+    
 }
 
 /**
  * @brief     interface receive callback
  * @param[in] type is the interrupt type
- * @return    status code
- *            - 0 success
  * @note      none
  */
-uint8_t ds3231_interface_receive_callback(uint8_t type)
+void ds3231_interface_receive_callback(uint8_t type)
 {
     switch (type)
     {
@@ -142,6 +139,4 @@ uint8_t ds3231_interface_receive_callback(uint8_t type)
             break;
         }
     }
-        
-    return 0;
 }

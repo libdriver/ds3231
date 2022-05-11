@@ -35,8 +35,8 @@
  * </table>
  */
   
-#ifndef _DRIVER_DS3231_OUTPUT_H_
-#define _DRIVER_DS3231_OUTPUT_H_
+#ifndef DRIVER_DS3231_OUTPUT_H
+#define DRIVER_DS3231_OUTPUT_H
 
 #include "driver_ds3231_interface.h"
 #include <time.h>
@@ -75,23 +75,23 @@ uint8_t ds3231_output_deinit(void);
 
 /**
  * @brief     output example set the time
- * @param[in] *time points to a time structure
+ * @param[in] *t points to a time structure
  * @return    status code
  *            - 0 success
  *            - 1 set time failed
  * @note      none
  */
-uint8_t ds3231_output_set_time(ds3231_time_t *time);
+uint8_t ds3231_output_set_time(ds3231_time_t *t);
 
 /**
  * @brief      output example get the time
- * @param[out] *time points to a time structure
+ * @param[out] *t points to a time structure
  * @return     status code
  *             - 0 success
  *             - 1 get time failed
  * @note       none
  */
-uint8_t ds3231_output_get_time(ds3231_time_t *time);
+uint8_t ds3231_output_get_time(ds3231_time_t *t);
 
 /**
  * @brief     output example set the time by a unix timestamp
@@ -143,11 +143,15 @@ uint8_t ds3231_output_get_timestamp_time_zone(int8_t *zone);
 uint8_t ds3231_output_get_temperature(int16_t *raw, float *s);
 
 /**
- * @brief  output example get the ascii time
- * @return points to a ascii time buffer
- * @note   none
+ * @brief      output example get the ascii time
+ * @param[out] *buf points to an ascii buffer
+ * @param[in]  len is the data length
+ * @return     status code
+ *             - 0 success
+ *             - 1 read failed
+ * @note       none
  */
-char *ds3231_output_get_ascii_time(void);
+uint8_t ds3231_output_get_ascii_time(char *buf, uint8_t len);
 
 /**
  * @brief     output example enable or disable the square wave

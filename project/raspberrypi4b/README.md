@@ -342,7 +342,7 @@ ds3231: finish output test.
 ```shell
 ./ds3231 -c basic -set -time 1612686500
 
-ds3231: set timestamp 1612686432.
+ds3231: set timestamp 1612686500.
 ```
 
 ```shell
