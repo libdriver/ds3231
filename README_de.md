@@ -52,6 +52,8 @@ Fügen Sie /src, /interface und /example zu Ihrem Projekt hinzu.
 #### example basic
 
 ```C
+#include "driver_ds3231_basic.h"
+
 uint8_t res;
 ds3231_time_t time;
 int16_t raw;
@@ -128,6 +130,8 @@ return 0;
 #### example alarm
 
 ```C
+#include "driver_ds3231_alarm.h"
+
 uint8_t res;
 ds3231_time_t time;
 ds3231_alarm1_mode_t mode;
@@ -220,6 +224,8 @@ return 0;
 #### example output
 
 ```C
+#include "driver_ds3231_output.h"
+
 uint8_t res;
 
 res = ds3231_output_init();
