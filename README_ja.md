@@ -52,6 +52,8 @@ LibDriver DS3231は、LibDriverによって起動されたds3231の全機能ド�
 #### example basic
 
 ```C
+#include "driver_ds3231_basic.h"
+
 uint8_t res;
 ds3231_time_t time;
 int16_t raw;
@@ -129,6 +131,8 @@ return 0;
 #### example alarm
 
 ```c
+#include "driver_ds3231_alarm.h"
+
 uint8_t res;
 ds3231_time_t time;
 ds3231_alarm1_mode_t mode;
@@ -221,6 +225,8 @@ return 0;
 #### example output
 
 ```c
+#include "driver_ds3231_output.h"
+
 uint8_t res;
 
 res = ds3231_output_init();
