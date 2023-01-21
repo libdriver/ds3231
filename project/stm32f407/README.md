@@ -2,89 +2,201 @@
 
 #### 1.1 Chip Info
 
-chip name : STM32F407ZGT6.
+Chip Name: STM32F407ZGT6.
 
-extern oscillator : 8MHz.
+Extern Oscillator: 8MHz.
 
-uart pin: TX/RX PA9/PA10.
+UART Pin: TX/RX PA9/PA10.
 
-iic pin: SCL/SDA PB8/PB9.
+IIC Pin: SCL/SDA PB8/PB9.
 
-gpio pin: INT PB0.
+GPIO Pin: INT PB0.
 
-### 2. Shell
+### 2. Development and Debugging
 
-#### 2.1 Shell Parameter
+#### 2.1 Integrated Development Environment
 
-baud rate: 115200.
+LidDriver provides both Keil and IAR integrated development environment projects.
 
-data bits : 8.
+MDK is the Keil ARM project and your Keil version must be 5 or higher.Keil ARM project needs STMicroelectronics STM32F4 Series Device Family Pack and you can download from https://www.keil.com/dd2/stmicroelectronics/stm32f407zgtx.
 
-stop bits: 1.
+EW is the IAR ARM project and your IAR version must be 9 or higher.
 
-parity: none.
+#### 2.2 Serial Port Parameter
 
-flow control: none.
+Baud Rate: 115200.
+
+Data Bits : 8.
+
+Stop Bits: 1.
+
+Parity: None.
+
+Flow Control: None.
+
+#### 2.3 Serial Port Assistant
+
+We use '\n' to wrap lines.If your serial port assistant displays exceptions (e.g. the displayed content does not divide lines), please modify the configuration of your serial port assistant or replace one that supports '\n' parsing.
 
 ### 3. DS3231
 
 #### 3.1 Command Instruction
 
-​          ds3231 is a basic command which can test all ds3231 driver function:
+1. Show ds3231 chip and driver information.
 
-​           -i        show ds3231 chip and driver information.
+   ```shell
+   ds3231 (-i | --information)
+   ```
 
-​           -h       show ds3231 help.
+2. Show ds3231 help.
 
-​           -p       show ds3231 pin connections of the current board.
+   ```shell
+   ds3231 (-h | --help)
+   ```
 
-​           -t (reg | readwrite <times>| output <times>)
+3. Show ds3231 pin connections of the current board.
 
-​           -t reg        run ds3231 register test.
+   ```shell
+   ds3231 (-p | --port)
+   ```
 
-​           -t readwrite <times>        run ds3231 readwrite test. times means test times.
+4. Run ds3231 register test.
 
-​           -t output <times>            run ds3231 output test. times means test times.
+   ```shell
+   ds3231 (-t reg | --test=reg)
+   ```
 
-​           -c (basic (-set -time <timestamp> | -get (-time | -temperature)) | alarm (-set (-time <timestamp> | -alarm1 <timestamp> | -alarm2 <timestamp> | -alarm1 -m (ONCE_A_SECOND | SECOND_MATCH | MINUTE_SECOND_MATCH | HOUR_MINUTE_SECOND_MATCH | DATE_HOUR_MINUTE_SECOND_MATCH | WEEK_HOUR_MINUTE_SECOND_MATCH)) | -alarm2 -m (ONCE_A_MINUTE | MINUTE_MATCH | HOUR_MINUTE_MATCH | DATE_HOUR_MINUTE_MATCH | WEEK_HOUR_MINUTE_MATCH) | -get (-time | -temperature | -alarm1 | -alarm2))| output (-set (-time <timestamp> | -1Hz (enable | disable) | -32KHz (enable | disable))| -get ( -1Hz | -32KHz | -time | -temperature)))
+5. Run ds3231 alarm test.
 
-​            -c basic -set -time <timestamp>        run ds3231 basic set time function. timestamp is the unix timestamp.
+   ```shell
+   ds3231 (-t alarm | --test=alarm)
+   ```
 
-​            -c basic -get -time        run ds3231 basic get time function.
+6. Run ds3231 readwrite test, num means test times.
 
-​            -c basic -get -temperature        run ds3231 basic get temperature function. 
+   ```shell
+   ds3231 (-t readwrite | --test=readwrite) [--times=<num>]
+   ```
 
-​            -c alarm -set -time <timestamp>        run ds3231 alarm set time function. timestamp is the unix timestamp.
+7. Run ds3231 output test, num means test times.
 
-​            -c alarm -set -alarm1 <timestamp>        run ds3231 alarm set alarm1 function. timestamp is the unix timestamp.
+   ```shell
+   ds3231 (-t output | --test=output) [--times=<num>]
+   ```
 
-​            -c alarm -set -alarm2 <timestamp>        run ds3231 alarm set alarm2 function. timestamp is the unix timestamp.
+8. Run ds3231 basic set time function, time is the unix timestamp.
 
-​            -c  alarm -set -alarm1 -m (ONCE_A_SECOND | SECOND_MATCH | MINUTE_SECOND_MATCH | HOUR_MINUTE_SECOND_MATCH | DATE_HOUR_MINUTE_SECOND_MATCH | WEEK_HOUR_MINUTE_SECOND_MATCH)        run ds3231 alarm set alarm1 function.
+   ```shell
+   ds3231 (-e basic-set-time | --example=basic-set-time) --timestamp=<time>
+   ```
 
-​             -c  alarm -set -alarm2 -m (ONCE_A_MINUTE | MINUTE_MATCH | HOUR_MINUTE_MATCH | DATE_HOUR_MINUTE_MATCH | WEEK_HOUR_MINUTE_MATCH)         run ds3231 alarm set alarm2 function.
+9. Run ds3231 basic get time function.
 
-​             -c alarm -get -time        run ds3231 alarm get time function.
+   ```shell
+   ds3231 (-e basic-get-time | --example=basic-get-time)
+   ```
 
-​             -c alarm -get -temperature        run ds3231 alarm get temperature function.
+10. Run ds3231 basic get temperature function. 
 
-​             -c alarm -get -alarm1        run ds3231 alarm get alarm1 function.
+    ```shell
+    ds3231 (-e basic-get-temperature | --example=basic-get-temperature)
+    ```
 
-​             -c alarm -get -alarm2        run ds3231 alarm get alarm2 function.
+11. Run ds3231 alarm set time function, time is the unix timestamp.
 
-​             -c output -set -time <timestamp>        run ds3231 output set time function. timestamp is the unix timestamp.
+    ```shell
+    ds3231 (-e alarm-set-time | --example=alarm-set-time) --timestamp=<time>
+    ```
 
-​             -c output -set -1Hz (enable | disable)        run ds3231 output set 1Hz function.
+12. Run ds3231 alarm set alarm1 function.
 
-​             -c output -set -32KHz (enable | disable)        run ds3231 output set 32KHz function.
+    ```shell
+    ds3231 (-e alarm-set-alarm1 | --example=alarm-set-alarm1) --enable=<true | false>
+    ```
 
-​             -c output -get -time        run ds3231 output get time function.
+13. Run ds3231 alarm set alarm2 function.
 
-​             -c output -get -1Hz        run ds3231 output get 1Hz function.
+    ```shell
+    ds3231 (-e alarm-set-alarm2 | --example=alarm-set-alarm2) --enable=<true | false>
+    ```
 
-​             -c output -get -32KHz        run ds3231 output get 32KHz function.
+14. Run ds3231 alarm set alarm1 function, time is the unix timestamp.
 
-​             -c output -get -temperature        run ds3231 output get temperature function.
+    ```shell
+    ds3231 (-e alarm-set-alarm1-mode | --example=alarm-set-alarm1-mode)  --timestamp=<time> --mode1=<ONCE_A_SECOND | SECOND_MATCH | MINUTE_SECOND_MATCH | HOUR_MINUTE_SECOND_MATCH | DATE_HOUR_MINUTE_SECOND_MATCH | WEEK_HOUR_MINUTE_SECOND_MATCH>
+    ```
+
+15. Run ds3231 alarm set alarm2 function, time is the unix timestamp.
+
+    ```shell
+    ds3231 (-e alarm-set-alarm2-mode | --example=alarm-set-alarm2-mode)  --timestamp=<time> --mode2=<ONCE_A_MINUTE | MINUTE_MATCH | HOUR_MINUTE_MATCH | DATE_HOUR_MINUTE_MATCH | WEEK_HOUR_MINUTE_MATCH>
+    ```
+
+16. Run ds3231 alarm get time function.
+
+    ```shell
+    ds3231 (-e alarm-get-time | --example=alarm-get-time)
+    ```
+
+17. Run ds3231 alarm get temperature function.
+
+    ```shell
+    ds3231 (-e alarm-get-temperature | --example=alarm-get-temperature)
+    ```
+
+18. Run ds3231 alarm get alarm1 function.
+
+    ```shell
+    ds3231 (-e alarm-get-alarm1 | --example=alarm-get-alarm1)
+    ```
+
+19. Run ds3231 alarm get alarm2 function.
+
+    ```shell
+    ds3231 (-e alarm-get-alarm2 | --example=alarm-get-alarm2)
+    ```
+
+20. Run ds3231 output set time function, time is the unix timestamp.
+
+    ```shell
+    ds3231 (-e output-set-time | --example=output-set-time) --timestamp=<time>
+    ```
+
+21. Run ds3231 output set 1Hz function.
+
+    ```shell
+    ds3231 (-e output-set-1Hz | --example=output-set-1Hz) --enable=<true | false>
+    ```
+
+22. Run ds3231 output set 32KHz function.
+
+    ```shell
+    ds3231 (-e output-set-32KHz | --example=output-set-32KHz) --enable=<true | false>
+    ```
+
+23. Run ds3231 output get time function.
+
+    ```shell
+    ds3231 (-e output-get-time | --example=output-get-time)
+    ```
+
+24. Run ds3231 output get 1Hz function.
+
+    ```shell
+    ds3231 (-e output-get-1Hz | --example=output-get-1Hz)
+    ```
+
+25. Run ds3231 output get 32KHz function.
+
+    ```shell
+    ds3231 (-e output-get-32KHz | --example=output-get-32KHz)
+    ```
+
+26. Run ds3231 output get temperature function.
+
+    ```shell
+    ds3231 (-e output-get-temperature | --example=output-get-temperature)
+    ```
 
 #### 3.2 Command Example
 
@@ -293,7 +405,7 @@ ds3231: finish alarm test.
 ```
 
 ```shell
-ds3231 -t readwrite 3
+ds3231 -t readwrite --times=3
 
 ds3231: chip is Maxim Integrated DS3231.
 ds3231: manufacturer is Maxim Integrated.
@@ -306,23 +418,23 @@ ds3231: max temperature is 85.0C.
 ds3231: min temperature is -40.0C.
 ds3231: start readwrite test.
 ds3231: ds3231_set_time/ds3231_get_time test.
-ds3231: set time 2058-04-01 PM 04:00:27 2 in 12 format.
-ds3231: time is 2058-04-01 PM 04:00:28 2.
-ds3231: time is 2058-04-01 PM 04:00:29 2.
-ds3231: time is 2058-04-01 PM 04:00:30 2.
-ds3231: set time 2097-05-09 18:33:57 3 in 24 format.
-ds3231: time is 2097-05-09 18:33:58 3.
-ds3231: time is 2097-05-09 18:33:59 3.
-ds3231: time is 2097-05-09 18:34:00 3.
+ds3231: set time 2039-05-02 PM 04:29:28 3 in 12 format.
+ds3231: time is 2039-05-02 PM 04:29:29 3.
+ds3231: time is 2039-05-02 PM 04:29:30 3.
+ds3231: time is 2039-05-02 PM 04:29:31 3.
+ds3231: set time 2123-10-19 23:39:42 4 in 24 format.
+ds3231: time is 2123-10-19 23:39:43 4.
+ds3231: time is 2123-10-19 23:39:44 4.
+ds3231: time is 2123-10-19 23:39:45 4.
 ds3231: read temperature.
-ds3231: temperature is 28.25.
-ds3231: temperature is 28.00.
-ds3231: temperature is 28.25.
+ds3231: temperature is 30.00.
+ds3231: temperature is 30.00.
+ds3231: temperature is 30.00.
 ds3231: finish readwrite test.
 ```
 
 ```shell
-ds3231 -t output 3
+ds3231 -t output --times=3
 
 ds3231: chip is Maxim Integrated DS3231.
 ds3231: manufacturer is Maxim Integrated.
@@ -348,117 +460,118 @@ ds3231: finish output test.
 ```
 
 ```shell
-ds3231 -c basic -set -time 1612686500
+ds3231 -e basic-set-time --timestamp=1612686500
 
 ds3231: set timestamp 1612686500.
 ```
 
 ```shell
-ds3231 -c basic -get -time 
+ds3231 -e basic-get-time
 
-ds3231: 2021-02-07 16:27:27 7.
+ds3231: 2021-02-07 16:28:31 7.
 ```
 
 ```shell
-ds3231 -c basic -get -temperature
+ds3231 -e basic-get-temperature
 
-ds3231: temperature is 26.50C.
+ds3231: temperature is 30.00C.
 ```
 
 ```shell
-ds3231 -c alarm -set -time 1612686500
+ds3231 -e alarm-set-time --timestamp=1612686500
 
 ds3231: set timestamp 1612686500.
 ```
 
 ```shell
-ds3231 -c alarm -get -time 
+ds3231 -e alarm-get-time
 
-ds3231: 2021-02-07 16:28:38 7.
+ds3231: 2021-02-07 16:28:29 7.
 ```
 
 ```shell
-ds3231 -c alarm -get -temperature
+ds3231 -e alarm-get-temperature
 
-ds3231: temperature is 26.50C.
+ds3231: temperature is 30.00C.
 ```
 
 ```shell
-ds3231 -c alarm -get -alarm1
+ds3231 -e alarm-get-alarm1
 
-ds3231: 0000-00-07 16:28:20 0.
+ds3231: 0000-00-10 15:41:00 0.
 ```
 
 ```shell
-ds3231 -c alarm -set -alarm1 1612686500 -m ONCE_A_SECOND
+ds3231 -e alarm-set-alarm1-mode --timestamp=1612686500 --mode1=ONCE_A_SECOND
 
 ds3231: set alarm1 timestamp 1612715300 mode ONCE_A_SECOND.
 ```
 
 ```shell
-ds3231 -c alarm -set -alarm1 enable
+ds3231 -e alarm-set-alarm1 --enable=true
 
 ds3231: set alarm1 enable.
+ds3231: irq alarm1.
 ds3231: irq alarm1.
 ```
 
 ```shell
-ds3231 -c alarm -get -alarm2
+ds3231 -e alarm-get-alarm2
 
-ds3231: 0000-00-07 16:28:00 0.
+ds3231: 0000-00-10 15:41:00 0.
 ```
 
 ```shell
-ds3231 -c alarm -set -alarm2 1612686500 -m ONCE_A_MINUTE
+ds3231 -e alarm-set-alarm2-mode --timestamp=1612686500 --mode2=ONCE_A_MINUTE
 
 ds3231: set alarm2 timestamp 1612715300 mode ONCE_A_MINUTE.
 ```
 
 ```shell
-ds3231 -c alarm -set -alarm2 enable
+ds3231 -e alarm-set-alarm2 --enable=true
 
 ds3231: set alarm2 enable.
 ds3231: irq alarm2.
 ```
 
 ```shell
-ds3231 -c output -set -time 1612686500
+ds3231 -e output-set-time --timestamp=1612686500
 
 ds3231: set timestamp 1612686500.
 ```
 
 ```shell
-ds3231 -c output -get -time 
+ds3231 -e output-get-time
 
-ds3231: 2021-02-07 16:29:44 7.
+ds3231: 2021-02-07 16:28:31 7.
 ```
 
 ```shell
-ds3231 -c output -get -temperature
+ds3231 -e output-get-temperature
 
-ds3231: temperature is 26.25C.
+ds3231: temperature is 30.25C.
 ```
 
 ```shell
-ds3231 -c output -set -1Hz enable
+ds3231 -e output-set-1Hz --enable=true
 
 ds3231: set 1Hz output enable.
 ```
 
 ```shell
-ds3231 -c output -get -1Hz
+ds3231 -e output-get-1Hz
 
-ds3231: get 1Hz output disable.
+ds3231: get 1Hz output enable.
 ```
 
 ```shell
-ds3231 -c output -set -32KHz enable
+ds3231 -e output-set-32KHz --enable=true
 
 ds3231: set 32KHz output enable.
 ```
 
 ```shell
-ds3231 -c output -get -32KHz
+ds3231 -e output-get-32KHz
 
 ds3231: get 32KHz output enable.
 ```
@@ -466,55 +579,56 @@ ds3231: get 32KHz output enable.
 ```shell
 ds3231 -h
 
-ds3231 -i
-	show ds3231 chip and driver information.
-ds3231 -h
-	show ds3231 help.
-ds3231 -p
-	show ds3231 pin connections of the current board.
-ds3231 -t reg
-	run ds3231 register test.
-ds3231 -t readwrite <times>
-	run ds3231 readwrite test.times means test times.
-ds3231 -t output <times>
-	run ds3231 output test.times means test times.
-ds3231 -c basic -set -time <timestamp>
-	run ds3231 basic set time function.timestamp is the unix timestamp.
-ds3231 -c basic -get -time
-	run ds3231 basic get time function.
-ds3231 -c basic -get -temperature
-	run ds3231 basic get temperature function.
-ds3231 -c alarm -set -time <timestamp>
-	run ds3231 alarm set time function.timestamp is the unix timestamp.
-ds3231 -c alarm -set -alarm1 <timestamp>
-	run ds3231 alarm set alarm1 function.timestamp is the unix timestamp.
-ds3231 -c alarm -set -alarm2 <timestamp>
-	run ds3231 alarm set alarm2 function.timestamp is the unix timestamp.
-ds3231 -c alarm -set -alarm1 -m (ONCE_A_SECOND | SECOND_MATCH | MINUTE_SECOND_MATCH | HOUR_MINUTE_SECOND_MATCH | DATE_HOUR_MINUTE_SECOND_MATCH | WEEK_HOUR_MINUTE_SECOND_MATCH)
-	run ds3231 alarm set alarm1 function.
-ds3231 -c alarm -set -alarm2 -m (ONCE_A_MINUTE | MINUTE_MATCH | HOUR_MINUTE_MATCH | DATE_HOUR_MINUTE_MATCH | WEEK_HOUR_MINUTE_MATCH)
-	run ds3231 alarm set alarm2 function.
-ds3231 -c alarm -get -time
-	run ds3231 alarm get time function.
-ds3231 -c alarm -get -temperature
-	run ds3231 alarm get temperature function.
-ds3231 -c alarm -get -alarm1
-	run ds3231 alarm get alarm1 function.
-ds3231 -c alarm -get -alarm2
-	run ds3231 alarm get alarm2 function.
-ds3231 -c output -set -time <timestamp>
-	run ds3231 output set time function.timestamp is the unix timestamp.
-ds3231 -c output -set -1Hz (enable | disable)
-	run ds3231 output set 1Hz function.
-ds3231 -c output -set -32KHz (enable | disable)
-	run ds3231 output set 32KHz function.
-ds3231 -c output -get -time
-	run ds3231 output get time function.
-ds3231 -c output -get -1Hz
-	run ds3231 output get 1Hz function.
-ds3231 -c output -get -32KHz
-	run ds3231 output get 32KHz function.
-ds3231 -c output -get -temperature
-	run ds3231 output get temperature function.
+Usage:
+  ds3231 (-i | --information)
+  ds3231 (-h | --help)
+  ds3231 (-p | --port)
+  ds3231 (-t reg | --test=reg)
+  ds3231 (-t alarm | --test=alarm)
+  ds3231 (-t readwrite | --test=readwrite) [--times=<num>]
+  ds3231 (-t output | --test=output) [--times=<num>]
+  ds3231 (-e basic-set-time | --example=basic-set-time) --timestamp=<time>
+  ds3231 (-e basic-get-time | --example=basic-get-time)
+  ds3231 (-e basic-get-temperature | --example=basic-get-temperature)
+  ds3231 (-e alarm-set-time | --example=alarm-set-time) --timestamp=<time>
+  ds3231 (-e alarm-set-alarm1 | --example=alarm-set-alarm1) --enable=<true | false>
+  ds3231 (-e alarm-set-alarm2 | --example=alarm-set-alarm2) --enable=<true | false>
+  ds3231 (-e alarm-set-alarm1-mode | --example=alarm-set-alarm1-mode) --timestamp=<time>
+         --mode1=<ONCE_A_SECOND | SECOND_MATCH | MINUTE_SECOND_MATCH | HOUR_MINUTE_SECOND_MATCH | DATE_HOUR_MINUTE_SECOND_MATCH | WEEK_HOUR_MINUTE_SECOND_MATCH>
+  ds3231 (-e alarm-set-alarm2-mode | --example=alarm-set-alarm2-mode) --timestamp=<time>
+         --mode2=<ONCE_A_MINUTE | MINUTE_MATCH | HOUR_MINUTE_MATCH | DATE_HOUR_MINUTE_MATCH | WEEK_HOUR_MINUTE_MATCH>
+  ds3231 (-e alarm-get-time | --example=alarm-get-time)
+  ds3231 (-e alarm-get-temperature | --example=alarm-get-temperature)
+  ds3231 (-e alarm-get-alarm1 | --example=alarm-get-alarm1)
+  ds3231 (-e alarm-get-alarm2 | --example=alarm-get-alarm2)
+  ds3231 (-e output-set-time | --example=output-set-time) --timestamp=<time>
+  ds3231 (-e output-set-1Hz | --example=output-set-1Hz) --enable=<true | false>
+  ds3231 (-e output-set-32KHz | --example=output-set-32KHz) --enable=<true | false>
+  ds3231 (-e output-get-time | --example=output-get-time)
+  ds3231 (-e output-get-1Hz | --example=output-get-1Hz)
+  ds3231 (-e output-get-32KHz | --example=output-get-32KHz)
+  ds3231 (-e output-get-temperature | --example=output-get-temperature)
+
+Options:
+  -e <basic-set-time | basic-get-time | basic-get-temperature | alarm-set-time | alarm-set-alarm1 | alarm-set-alarm2 | alarm-set-alarm1-mode
+     | alarm-set-alarm2-mode | alarm-get-time | alarm-get-temperature | alarm-get-alarm1 | alarm-get-alarm2 | output-set-time | output-set-1Hz
+     | output-set-32KHz | output-get-time | output-get-1Hz | output-get-32KHz | output-get-temperature>, --example=<basic-set-time | basic-get-time 
+     | basic-get-temperature | alarm-set-time | alarm-set-alarm1 | alarm-set-alarm2 | alarm-set-alarm1-mode | alarm-set-alarm2-mode | alarm-get-time 
+     | alarm-get-temperature | alarm-get-alarm1 | alarm-get-alarm2 | output-set-time | output-set-1Hz | output-set-32KHz | output-get-time 
+     | output-get-1Hz | output-get-32KHz | output-get-temperature>
+                                  Run the driver example.
+      --enable=<true | false>     Enable or disable the function.
+  -h, --help                      Show the help.
+  -i, --information               Show the chip information.
+      --mode1=<ONCE_A_SECOND | SECOND_MATCH | MINUTE_SECOND_MATCH | HOUR_MINUTE_SECOND_MATCH
+              | DATE_HOUR_MINUTE_SECOND_MATCH | WEEK_HOUR_MINUTE_SECOND_MATCH>
+                                  Set the alarm1 mode.
+      --mode2=<ONCE_A_MINUTE | MINUTE_MATCH | HOUR_MINUTE_MATCH | DATE_HOUR_MINUTE_MATCH | WEEK_HOUR_MINUTE_MATCH>
+                                  Set the alarm2 mode.
+  -p, --port                      Display the pin connections of the current board.
+  -t <reg | alarm | readwrite | output>, --test=<reg | alarm | readwrite | output>
+                                  Run the driver test.
+      --times=<num>               Set the running times.([default: 3])
+      --timestamp=<time>          Set the the unix timestamp.
 ```
 
