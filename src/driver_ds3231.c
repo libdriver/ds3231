@@ -81,7 +81,7 @@
  * @brief     write one byte
  * @param[in] *handle points to a ds3231 handle structure
  * @param[in] reg is the iic register address
- * @param[in] data is the written data
+ * @param[in] data is the write data
  * @return    status code
  *            - 0 success
  *            - 1 write failed
@@ -573,7 +573,7 @@ uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
  * @brief      get the alarm1 time
  * @param[in]  *handle points to a ds3231 handle structure
  * @param[out] *t points to a time structure
- * @param[out] *mode points to a alarm1 interrupt mode buffer
+ * @param[out] *mode points to an alarm1 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm1 failed
@@ -754,7 +754,7 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
         
         return 1;                                                                                                                  /* return error */
     }
-    if (mode >= DS3231_ALARM1_MODE_WEEK_HOUR_MINUTE_SECOND_MATCH)                                                                  /* if week */
+    if (mode >= (uint8_t)DS3231_ALARM1_MODE_WEEK_HOUR_MINUTE_SECOND_MATCH)                                                         /* if week */
     {
         reg = (((mode >> 2) & 0x01) << 7) | (1 << 6) | a_ds3231_hex2bcd(t->week);                                                  /* set data in week */
     }
@@ -777,7 +777,7 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
  * @brief      get the alarm2 time
  * @param[in]  *handle points to a ds3231 handle structure
  * @param[out] *t points to a time structure
- * @param[out] *mode points to a alarm2 interrupt mode buffer
+ * @param[out] *mode points to an alarm2 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm2 failed

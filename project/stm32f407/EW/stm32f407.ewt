@@ -1664,6 +1664,9 @@
             <name>$PROJ_DIR$\..\hal\src\stm32f4xx_ll_fmc.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\hal\src\stm32f4xx_ll_fmpi2c.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\hal\src\stm32f4xx_ll_fsmc.c</name>
         </file>
         <file>
@@ -1747,6 +1750,9 @@
     </group>
     <group>
         <name>usr</name>
+        <file>
+            <name>$PROJ_DIR$\..\usr\src\getopt.c</name>
+        </file>
         <file>
             <name>$PROJ_DIR$\..\usr\src\main.c</name>
         </file>

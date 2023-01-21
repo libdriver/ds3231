@@ -175,10 +175,10 @@ typedef struct ds3231_time_s
  */
 typedef struct ds3231_handle_s
 {
-    uint8_t (*iic_init)(void);                                                          /**< point to a iic_init function address */
-    uint8_t (*iic_deinit)(void);                                                        /**< point to a iic_deinit function address */
-    uint8_t (*iic_write)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);        /**< point to a iic_write function address */
-    uint8_t (*iic_read)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);         /**< point to a iic_read function address */
+    uint8_t (*iic_init)(void);                                                          /**< point to an iic_init function address */
+    uint8_t (*iic_deinit)(void);                                                        /**< point to an iic_deinit function address */
+    uint8_t (*iic_write)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);        /**< point to an iic_write function address */
+    uint8_t (*iic_read)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);         /**< point to an iic_read function address */
     void (*debug_print)(const char *const fmt, ...);                                    /**< point to a debug_print function address */
     void (*receive_callback)(uint8_t type);                                             /**< point to a receive_callback function address */
     void (*delay_ms)(uint32_t ms);                                                      /**< point to a delay_ms function address */
@@ -223,7 +223,7 @@ typedef struct ds3231_info_s
 /**
  * @brief     link iic_init function
  * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to a iic_init function address
+ * @param[in] FUC points to an iic_init function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_IIC_INIT(HANDLE, FUC)          (HANDLE)->iic_init = FUC
@@ -231,7 +231,7 @@ typedef struct ds3231_info_s
 /**
  * @brief     link iic_deinit function
  * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to a iic_deinit function address
+ * @param[in] FUC points to an iic_deinit function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_IIC_DEINIT(HANDLE, FUC)        (HANDLE)->iic_deinit = FUC
@@ -239,7 +239,7 @@ typedef struct ds3231_info_s
 /**
  * @brief     link iic_read function
  * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to a iic_read function address
+ * @param[in] FUC points to an iic_read function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_IIC_READ(HANDLE, FUC)          (HANDLE)->iic_read = FUC
@@ -247,7 +247,7 @@ typedef struct ds3231_info_s
 /**
  * @brief     link iic_write function
  * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to a iic_write function address
+ * @param[in] FUC points to an iic_write function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_IIC_WRITE(HANDLE, FUC)         (HANDLE)->iic_write = FUC
@@ -611,7 +611,7 @@ uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
  * @brief      get the alarm1 time
  * @param[in]  *handle points to a ds3231 handle structure
  * @param[out] *t points to a time structure
- * @param[out] *mode points to a alarm1 interrupt mode buffer
+ * @param[out] *mode points to an alarm1 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm1 failed
@@ -639,7 +639,7 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
  * @brief      get the alarm2 time
  * @param[in]  *handle points to a ds3231 handle structure
  * @param[out] *t points to a time structure
- * @param[out] *mode points to a alarm2 interrupt mode buffer
+ * @param[out] *mode points to an alarm2 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm2 failed

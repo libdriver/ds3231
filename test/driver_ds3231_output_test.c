@@ -79,7 +79,7 @@ uint8_t ds3231_output_test(uint32_t times)
         ds3231_interface_debug_print("ds3231: chip is %s.\n", info.chip_name);
         ds3231_interface_debug_print("ds3231: manufacturer is %s.\n", info.manufacturer_name);
         ds3231_interface_debug_print("ds3231: interface is %s.\n", info.interface);
-        ds3231_interface_debug_print("ds3231: driver version is %d.%d.\n", info.driver_version/1000, (info.driver_version%1000)/100);
+        ds3231_interface_debug_print("ds3231: driver version is %d.%d.\n", info.driver_version / 1000, (info.driver_version % 1000) / 100);
         ds3231_interface_debug_print("ds3231: min supply voltage is %0.1fV.\n", info.supply_voltage_min_v);
         ds3231_interface_debug_print("ds3231: max supply voltage is %0.1fV.\n", info.supply_voltage_max_v);
         ds3231_interface_debug_print("ds3231: max current is %0.2fmA.\n", info.max_current_ma);
