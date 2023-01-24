@@ -72,7 +72,7 @@ void EXTI0_IRQHandler(void)
  */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if(GPIO_Pin==GPIO_PIN_0)
+    if(GPIO_Pin = =GPIO_PIN_0)
     {
         if (g_gpio_irq != NULL)
         {
@@ -116,9 +116,9 @@ static void a_alarm_receive_callback(uint8_t type)
  * @param[in] argc is arg numbers
  * @param[in] **argv is the arg address
  * @return    status code
- *             - 0 success
- *             - 1 run failed
- *             - 5 param is invalid
+ *            - 0 success
+ *            - 1 run failed
+ *            - 5 param is invalid
  * @note      none
  */
 uint8_t ds3231(uint8_t argc, char **argv)

@@ -85,9 +85,9 @@ static void a_alarm_receive_callback(uint8_t type)
  * @param[in] argc is arg numbers
  * @param[in] **argv is the arg address
  * @return    status code
- *             - 0 success
- *             - 1 run failed
- *             - 5 param is invalid
+ *            - 0 success
+ *            - 1 run failed
+ *            - 5 param is invalid
  * @note      none
  */
 uint8_t ds3231(uint8_t argc, char **argv)
