@@ -109,7 +109,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
         {"timestamp", required_argument, NULL, 5},
         {NULL, 0, NULL, 0},
     };
-    char type[32] = "unknow";
+    char type[33] = "unknow";
     char mode_name[32] = {0};
     uint32_t times = 3;
     uint32_t t = 0;
@@ -144,7 +144,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             case 'h' :
             {
                 /* set the type */
-                memset(type, 0, sizeof(char) * 32);
+                memset(type, 0, sizeof(char) * 33);
                 snprintf(type, 32, "h");
                 
                 break;
@@ -154,7 +154,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             case 'i' :
             {
                 /* set the type */
-                memset(type, 0, sizeof(char) * 32);
+                memset(type, 0, sizeof(char) * 33);
                 snprintf(type, 32, "i");
                 
                 break;
@@ -164,7 +164,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             case 'p' :
             {
                 /* set the type */
-                memset(type, 0, sizeof(char) * 32);
+                memset(type, 0, sizeof(char) * 33);
                 snprintf(type, 32, "p");
                 
                 break;
@@ -174,7 +174,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             case 'e' :
             {
                 /* set the type */
-                memset(type, 0, sizeof(char) * 32);
+                memset(type, 0, sizeof(char) * 33);
                 snprintf(type, 32, "e_%s", optarg);
                 
                 break;
@@ -184,7 +184,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             case 't' :
             {
                 /* set the type */
-                memset(type, 0, sizeof(char) * 32);
+                memset(type, 0, sizeof(char) * 33);
                 snprintf(type, 32, "t_%s", optarg);
                 
                 break;
