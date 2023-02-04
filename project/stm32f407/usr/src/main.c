@@ -140,7 +140,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
         {"timestamp", required_argument, NULL, 5},
         {NULL, 0, NULL, 0},
     };
-    char type[33] = "unknow";
+    char type[33] = "unknown";
     char mode_name[32] = {0};
     uint32_t times = 3;
     uint32_t t = 0;
@@ -224,7 +224,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             /* enable */
             case 1 :
             {
-                /* set the enable */
+                /* set enable */
                 if (strcmp("true", optarg) == 0)
                 {
                     enable = DS3231_BOOL_TRUE;
@@ -1341,7 +1341,7 @@ int main(void)
     /* uart init */
     uart_init(115200);
 
-    /* shell init && register ds3231 fuction */
+    /* shell init && register ds3231 function */
     shell_init();
     shell_register("ds3231", ds3231);
     uart_print("ds3231: welcome to libdriver ds3231.\n");
@@ -1364,7 +1364,7 @@ int main(void)
             }
             else if (res == 2)
             {
-                uart_print("ds3231: unknow command.\n");
+                uart_print("ds3231: unknown command.\n");
             }
             else if (res == 3)
             {
@@ -1380,7 +1380,7 @@ int main(void)
             }
             else
             {
-                uart_print("ds3231: unknow status code.\n");
+                uart_print("ds3231: unknown status code.\n");
             }
             uart_flush();
         }

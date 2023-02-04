@@ -342,7 +342,7 @@ uint8_t ds3231_irq_handler(ds3231_handle_t *handle);
  *            - 1 set time failed
  *            - 2 handle or time is NULL
  *            - 3 handle is not initialized
- *            - 4 time is invalide
+ *            - 4 time is invalid
  * @note      none
  */
 uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *t);

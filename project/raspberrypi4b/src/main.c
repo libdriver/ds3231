@@ -109,7 +109,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
         {"timestamp", required_argument, NULL, 5},
         {NULL, 0, NULL, 0},
     };
-    char type[33] = "unknow";
+    char type[33] = "unknown";
     char mode_name[32] = {0};
     uint32_t times = 3;
     uint32_t t = 0;
@@ -193,7 +193,7 @@ uint8_t ds3231(uint8_t argc, char **argv)
             /* enable */
             case 1 :
             {
-                /* set the enable */
+                /* set enable */
                 if (strcmp("true", optarg) == 0)
                 {
                     enable = DS3231_BOOL_TRUE;
@@ -1338,7 +1338,7 @@ int main(uint8_t argc, char **argv)
     }
     else
     {
-        ds3231_interface_debug_print("ds3231: unknow status code.\n");
+        ds3231_interface_debug_print("ds3231: unknown status code.\n");
     }
 
     return 0;
