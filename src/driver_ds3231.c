@@ -166,7 +166,7 @@ static uint8_t a_ds3231_bcd2hex(uint8_t val)
  *            - 1 set time failed
  *            - 2 handle or time is NULL
  *            - 3 handle is not initialized
- *            - 4 time is invalide
+ *            - 4 time is invalid
  * @note      none
  */
 uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *t)
@@ -295,7 +295,7 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *t)
         return 1;                                                                                            /* return error */
     }
     res = a_ds3231_iic_write(handle, DS3231_REG_MINUTE, a_ds3231_hex2bcd(t->minute));                        /* write minute */
-    if (res != 0)                                                                                            /* check reuslt */
+    if (res != 0)                                                                                            /* check result */
     {
         handle->debug_print("ds3231: write minute failed.\n");                                               /* write minute failed */
         
@@ -1249,9 +1249,9 @@ uint8_t ds3231_get_temperature(ds3231_handle_t *handle, int16_t *raw, float *s)
     }
     *raw = (int16_t)(((uint16_t)buf[0]) << 8) | buf[1];                                         /* set raw temperature */
     *raw = (*raw) >> 6;                                                                         /* right shift */
-    if (((*raw) & 0x0200) != 0)                                                                 /* set negtive value */
+    if (((*raw) & 0x0200) != 0)                                                                 /* set negative value */
     {
-        *raw = (*raw) | 0xFC00U;                                                                /* set negtive part */
+        *raw = (*raw) | 0xFC00U;                                                                /* set negative part */
     }
     *s = (float)(*raw) * 0.25f;                                                                 /* set converted temperature */
     
@@ -1803,7 +1803,7 @@ uint8_t ds3231_info(ds3231_info_t *info)
     info->max_current_ma = MAX_CURRENT;                             /* set maximum current */
     info->temperature_max = TEMPERATURE_MAX;                        /* set minimal temperature */
     info->temperature_min = TEMPERATURE_MIN;                        /* set maximum temperature */
-    info->driver_version = DRIVER_VERSION;                          /* set driver verison */
+    info->driver_version = DRIVER_VERSION;                          /* set driver version */
     
     return 0;                                                       /* success return 0 */
 }
