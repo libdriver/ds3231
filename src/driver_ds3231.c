@@ -192,9 +192,9 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *t)
     }
     if (t->format == DS3231_FORMAT_12H)                                                                      /* if 12H */
     {
-        if ((t->year < 1990) || (t->year > 2190))                                                            /* check year */
+        if ((t->year < 2000) || (t->year > 2200))                                                            /* check year */
         {
-            handle->debug_print("ds3231: year can't be over 2190 or less than 1990.\n");                     /* year can't be over 2190 or less than 1990 */
+            handle->debug_print("ds3231: year can't be over 2200 or less than 2000.\n");                     /* year can't be over 2200 or less than 2000 */
             
             return 4;                                                                                        /* return error */
         }
@@ -237,9 +237,9 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *t)
     }
     else if (t->format == DS3231_FORMAT_24H)                                                                 /* if 24H */
     {
-        if ((t->year < 1990) || (t->year > 2190))                                                            /* check year */
+        if ((t->year < 2000) || (t->year > 2200))                                                            /* check year */
         {
-            handle->debug_print("ds3231: year can't be over 2190 or less than 1990.\n");                     /* year can't be over 2190 or less than 1990 */
+            handle->debug_print("ds3231: year can't be over 2200 or less than 2000.\n");                     /* year can't be over 2200 or less than 2000 */
             
             return 4;                                                                                        /* return error */
         }
@@ -330,7 +330,7 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *t)
         
         return 1;                                                                                            /* return error */
     }
-    year = t->year - 1990;                                                                                   /* year -1990 */
+    year = t->year - 2000;                                                                                   /* year - 2000 */
     if (year >= 100)                                                                                         /* check year */
     {
         century = 1;                                                                                         /* set century */
@@ -397,7 +397,7 @@ uint8_t ds3231_get_time(ds3231_handle_t *handle, ds3231_time_t *t)
         
         return 1;                                                                         /* return error */
     }
-    t->year = a_ds3231_bcd2hex(buf[6]) + 1990 + ((buf[5] >> 7) & 0x01) * 100;             /* get year */
+    t->year = a_ds3231_bcd2hex(buf[6]) + 2000 + ((buf[5] >> 7) & 0x01) * 100;             /* get year */
     t->month = a_ds3231_bcd2hex(buf[5]&0x1F);                                             /* get month */
     t->week = a_ds3231_bcd2hex(buf[3]);                                                   /* get week */
     t->date = a_ds3231_bcd2hex(buf[4]);                                                   /* get date */
