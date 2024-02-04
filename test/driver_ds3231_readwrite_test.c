@@ -188,7 +188,7 @@ uint8_t ds3231_readwrite_test(uint32_t times)
     /* 12H format */
     time_in.format = DS3231_FORMAT_12H;
     time_in.am_pm = DS3231_PM;
-    time_in.year = rand() % 100 + 1990;
+    time_in.year = rand() % 100 + 2000;
     time_in.month = rand() % 12 + 1;
     time_in.date = rand() % 20 + 1;
     time_in.date = rand() % 20 + 1;
