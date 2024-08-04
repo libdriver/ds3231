@@ -8,7 +8,7 @@
 
 [![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/ds3231/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
-DS3231是低成本、高精度IIC實時時鐘，具有集成的溫補晶體振盪器和晶體。該器件包含電池輸入端，斷開主電源時仍可保持精確的及時。集成晶體振盪器提高了器件的長期精確度，並減少了生產線的元件數量。 DS3231提供商用級和工業級溫度範圍，採用16引腳、300mil的SO封裝。
+DS3231是低成本、高精度IIC即時時鐘，具有集成的溫補晶體振盪器。 該器件包含電池輸入端，斷開主電源時仍可保持精確的及時。 集成晶體振盪器提高了器件的長期精確度，並减少了生產線的元件數量。 DS3231提供商用級和工業級溫度範圍，採用16引脚、300mil的SO封裝。
 
 LibDriver DS3231是LibDriver推出的DS3231全功能驅動，該驅動提供時間讀取、鬧鐘觸發、溫度讀取和方波輸出等功能並且它符合MISRA標準。
 
