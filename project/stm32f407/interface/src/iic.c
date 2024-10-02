@@ -72,7 +72,7 @@ uint8_t iic_init(void)
     
     /* iic gpio init */
     GPIO_Initure.Pin = GPIO_PIN_8 | GPIO_PIN_9;
-    GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP;   
+    GPIO_Initure.Mode = GPIO_MODE_OUTPUT_OD;
     GPIO_Initure.Pull = GPIO_PULLUP;
     GPIO_Initure.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOB, &GPIO_Initure);
