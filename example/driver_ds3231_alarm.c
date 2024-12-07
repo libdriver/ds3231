@@ -62,7 +62,7 @@ uint8_t ds3231_alarm_irq_handler(void)
 
 /**
  * @brief     alarm example init
- * @param[in] *alarm_receive_callback points to a alarm receive callback function callback
+ * @param[in] *alarm_receive_callback pointer to a alarm receive callback function callback
  * @return    status code
  *            - 0 success
  *            - 1 init failed
@@ -176,8 +176,8 @@ uint8_t ds3231_alarm_deinit(void)
 
 /**
  * @brief     alarm example set the alarm 1
- * @param[in] *t points to a time structure
- * @param[in] mode is the alarm 1 interrupt mode
+ * @param[in] *t pointer to a time structure
+ * @param[in] mode alarm 1 interrupt mode
  * @return    status code
  *            - 0 success
  *            - 1 set alarm1 failed
@@ -198,8 +198,8 @@ uint8_t ds3231_alarm_set_alarm1(ds3231_time_t *t, ds3231_alarm1_mode_t mode)
 
 /**
  * @brief      alarm example get the alarm 1
- * @param[out] *t points to a time structure
- * @param[out] *mode points to a alarm 1 interrupt mode buffer
+ * @param[out] *t pointer to a time structure
+ * @param[out] *mode pointer to a alarm 1 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm1 failed
@@ -220,8 +220,8 @@ uint8_t ds3231_alarm_get_alarm1(ds3231_time_t *t, ds3231_alarm1_mode_t *mode)
 
 /**
  * @brief     alarm example set the alarm 2
- * @param[in] *t points to a time structure
- * @param[in] mode is the alarm 2 interrupt mode
+ * @param[in] *t pointer to a time structure
+ * @param[in] mode alarm 2 interrupt mode
  * @return    status code
  *            - 0 success
  *            - 1 set alarm2 failed
@@ -242,8 +242,8 @@ uint8_t ds3231_alarm_set_alarm2(ds3231_time_t *t, ds3231_alarm2_mode_t mode)
 
 /**
  * @brief      alarm example get the alarm 2
- * @param[out] *t points to a time structure
- * @param[out] *mode points to a alarm 2 interrupt mode buffer
+ * @param[out] *t pointer to a time structure
+ * @param[out] *mode pointer to a alarm 2 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm2 failed
@@ -264,7 +264,7 @@ uint8_t ds3231_alarm_get_alarm2(ds3231_time_t *t, ds3231_alarm2_mode_t *mode)
 
 /**
  * @brief     alarm clear the interrupt flag
- * @param[in] alarm is the alarm number
+ * @param[in] alarm alarm number
  * @return    status code
  *            - 0 success
  *            - 1 alarm clear failed
@@ -285,7 +285,7 @@ uint8_t ds3231_alarm_clear_flag(ds3231_alarm_t alarm)
 
 /**
  * @brief     enable the alarm
- * @param[in] alarm is the alarm number
+ * @param[in] alarm alarm number
  * @return    status code
  *            - 0 success
  *            - 1 enable alarm failed
@@ -312,7 +312,7 @@ uint8_t ds3231_alarm_enable(ds3231_alarm_t alarm)
 
 /**
  * @brief     disable the alarm
- * @param[in] alarm is the alarm number
+ * @param[in] alarm alarm number
  * @return    status code
  *            - 0 success
  *            - 1 disable alarm failed
@@ -333,7 +333,7 @@ uint8_t ds3231_alarm_disable(ds3231_alarm_t alarm)
 
 /**
  * @brief     alarm example set the time
- * @param[in] *t points to a time structure
+ * @param[in] *t pointer to a time structure
  * @return    status code
  *            - 0 success
  *            - 1 set time failed
@@ -354,7 +354,7 @@ uint8_t ds3231_alarm_set_time(ds3231_time_t *t)
 
 /**
  * @brief     alarm example set the time by a unix timestamp
- * @param[in] timestamp is a unix timestamp
+ * @param[in] timestamp unix timestamp
  * @return    status code
  *            - 0 success
  *            - 1 set timestamp failed
@@ -398,7 +398,7 @@ uint8_t ds3231_alarm_set_timestamp(time_t timestamp)
 
 /**
  * @brief     alarm example set the local time zone
- * @param[in] zone is the local time zone
+ * @param[in] zone local time zone
  * @return    status code
  *            - 0 success
  * @note      none
@@ -412,7 +412,7 @@ uint8_t ds3231_alarm_set_timestamp_time_zone(int8_t zone)
 
 /**
  * @brief      alarm example get the time
- * @param[out] *t points to a time structure
+ * @param[out] *t pointer to a time structure
  * @return     status code
  *             - 0 success
  *             - 1 get time failed
@@ -433,7 +433,7 @@ uint8_t ds3231_alarm_get_time(ds3231_time_t *t)
 
 /**
  * @brief      alarm example get the time in a unix timestamp
- * @param[out] *timestamp points to a unix timestamp buffer
+ * @param[out] *timestamp pointer to a unix timestamp buffer
  * @return     status code
  *             - 0 success
  *             - 1 get timestamp failed
@@ -472,7 +472,7 @@ uint8_t ds3231_alarm_get_timestamp(time_t *timestamp)
 
 /**
  * @brief      alarm example get the local time zone
- * @param[out] *zone points to a local time zone buffer
+ * @param[out] *zone pointer to a local time zone buffer
  * @return     status code
  *             - 0 success
  * @note       none
@@ -486,8 +486,8 @@ uint8_t ds3231_alarm_get_timestamp_time_zone(int8_t *zone)
 
 /**
  * @brief      alarm example get the current temperature
- * @param[out] *raw points to a raw temperature buffer
- * @param[out] *s points to a converted temperature buffer
+ * @param[out] *raw pointer to a raw temperature buffer
+ * @param[out] *s pointer to a converted temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 read temperature failed
@@ -508,8 +508,8 @@ uint8_t ds3231_alarm_get_temperature(int16_t *raw, float *s)
 
 /**
  * @brief      alarm example get the ascii time
- * @param[out] *buf points to an ascii buffer
- * @param[in]  len is the data length
+ * @param[out] *buf pointer to an ascii buffer
+ * @param[in]  len data length
  * @return     status code
  *             - 0 success
  *             - 1 read failed

@@ -240,8 +240,8 @@ Functions</h2></td></tr>
 <p>clear the alarm flag </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">alarm</td><td>is the alarm number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">alarm</td><td>alarm number </td></tr>
   </table>
   </dd>
 </dl>
@@ -293,9 +293,9 @@ Functions</h2></td></tr>
 <p>get the alarm1 time </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*t</td><td>points to a time structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*mode</td><td>points to an alarm1 interrupt mode buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*t</td><td>pointer to a time structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*mode</td><td>pointer to an alarm1 interrupt mode buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -347,9 +347,9 @@ Functions</h2></td></tr>
 <p>get the alarm2 time </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*t</td><td>points to a time structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*mode</td><td>points to an alarm2 interrupt mode buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*t</td><td>pointer to a time structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*mode</td><td>pointer to an alarm2 interrupt mode buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -401,9 +401,9 @@ Functions</h2></td></tr>
 <p>get the alarm interrupt status </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">alarm</td><td>is the alarm number </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*enable</td><td>points to a bool value buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">alarm</td><td>alarm number </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*enable</td><td>pointer to a bool value buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -455,9 +455,9 @@ Functions</h2></td></tr>
 <p>set the alarm1 time </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">*t</td><td>points to a time structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>is the alarm1 interrupt mode </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*t</td><td>pointer to a time structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>alarm1 interrupt mode </td></tr>
   </table>
   </dd>
 </dl>
@@ -509,9 +509,9 @@ Functions</h2></td></tr>
 <p>set the alarm2 time </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">*t</td><td>points to a time structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>is the alarm2 interrupt mode </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*t</td><td>pointer to a time structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>alarm2 interrupt mode </td></tr>
   </table>
   </dd>
 </dl>
@@ -563,9 +563,9 @@ Functions</h2></td></tr>
 <p>enable or disable the alarm interrupt </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">alarm</td><td>is the alarm number </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>is a bool value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">alarm</td><td>alarm number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>bool value </td></tr>
   </table>
   </dd>
 </dl>
