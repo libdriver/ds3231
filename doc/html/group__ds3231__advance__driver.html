@@ -168,9 +168,9 @@ Functions</h2></td></tr>
 <p>convert a register raw data to a converted aging offset data </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">reg</td><td>is the register raw data </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*offset</td><td>points to a converted aging offset buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">reg</td><td>register raw data </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*offset</td><td>pointer to a converted aging offset buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -221,9 +221,9 @@ Functions</h2></td></tr>
 <p>convert a aging offset value to a register raw data </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>is a converted aging offset value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*reg</td><td>points to a register raw buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>converted aging offset value </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*reg</td><td>pointer to a register raw buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -268,8 +268,8 @@ Functions</h2></td></tr>
 <p>get the 32KHz output status </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*enable</td><td>points to a bool value buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*enable</td><td>pointer to a bool value buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -315,8 +315,8 @@ Functions</h2></td></tr>
 <p>get the chip aging offset </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*offset</td><td>points to a time aging offset buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*offset</td><td>pointer to a time aging offset buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -362,8 +362,8 @@ Functions</h2></td></tr>
 <p>get the chip pin function </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*pin</td><td>points to a pin's function buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*pin</td><td>pointer to a pin's function buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -409,8 +409,8 @@ Functions</h2></td></tr>
 <p>get the square wave output status </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*enable</td><td>points to a bool value buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*enable</td><td>pointer to a bool value buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -462,9 +462,9 @@ Functions</h2></td></tr>
 <p>get the chip temperature </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*raw</td><td>points to a raw temperature buffer </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*s</td><td>points to a converted temperature buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*raw</td><td>pointer to a raw temperature buffer </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*s</td><td>pointer to a converted temperature buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -510,8 +510,8 @@ Functions</h2></td></tr>
 <p>enable or disable the 32KHz output </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>is a bool value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>bool value </td></tr>
   </table>
   </dd>
 </dl>
@@ -557,8 +557,8 @@ Functions</h2></td></tr>
 <p>set the chip aging offset </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>is time aging offset </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>time aging offset </td></tr>
   </table>
   </dd>
 </dl>
@@ -604,8 +604,8 @@ Functions</h2></td></tr>
 <p>set the chip pin function </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>is the pin's function </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>pin function </td></tr>
   </table>
   </dd>
 </dl>
@@ -651,8 +651,8 @@ Functions</h2></td></tr>
 <p>enable or disable the square wave output </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a ds3231 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>is a bool value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a ds3231 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>bool value </td></tr>
   </table>
   </dd>
 </dl>

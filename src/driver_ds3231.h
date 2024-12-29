@@ -214,64 +214,64 @@ typedef struct ds3231_info_s
 
 /**
  * @brief     initialize ds3231_handle_t structure
- * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] STRUCTURE is ds3231_handle_t
+ * @param[in] HANDLE pointer to a ds3231 handle structure
+ * @param[in] STRUCTURE ds3231_handle_t
  * @note      none
  */
 #define DRIVER_DS3231_LINK_INIT(HANDLE, STRUCTURE)         memset(HANDLE, 0, sizeof(STRUCTURE))
 
 /**
  * @brief     link iic_init function
- * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to an iic_init function address
+ * @param[in] HANDLE pointer to a ds3231 handle structure
+ * @param[in] FUC pointer to an iic_init function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_IIC_INIT(HANDLE, FUC)          (HANDLE)->iic_init = FUC
 
 /**
  * @brief     link iic_deinit function
- * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to an iic_deinit function address
+ * @param[in] HANDLE pointer to a ds3231 handle structure
+ * @param[in] FUC pointer to an iic_deinit function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_IIC_DEINIT(HANDLE, FUC)        (HANDLE)->iic_deinit = FUC
 
 /**
  * @brief     link iic_read function
- * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to an iic_read function address
+ * @param[in] HANDLE pointer to a ds3231 handle structure
+ * @param[in] FUC pointer to an iic_read function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_IIC_READ(HANDLE, FUC)          (HANDLE)->iic_read = FUC
 
 /**
  * @brief     link iic_write function
- * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to an iic_write function address
+ * @param[in] HANDLE pointer to a ds3231 handle structure
+ * @param[in] FUC pointer to an iic_write function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_IIC_WRITE(HANDLE, FUC)         (HANDLE)->iic_write = FUC
 
 /**
  * @brief     link delay_ms function
- * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to a delay_ms function address
+ * @param[in] HANDLE pointer to a ds3231 handle structure
+ * @param[in] FUC pointer to a delay_ms function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_DELAY_MS(HANDLE, FUC)          (HANDLE)->delay_ms = FUC
 
 /**
  * @brief     link debug_print function
- * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to a debug_print function address
+ * @param[in] HANDLE pointer to a ds3231 handle structure
+ * @param[in] FUC pointer to a debug_print function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_DEBUG_PRINT(HANDLE, FUC)       (HANDLE)->debug_print = FUC
 
 /**
  * @brief     link receive_callback function
- * @param[in] HANDLE points to a ds3231 handle structure
- * @param[in] FUC points to a receive_callback function address
+ * @param[in] HANDLE pointer to a ds3231 handle structure
+ * @param[in] FUC pointer to a receive_callback function address
  * @note      none
  */
 #define DRIVER_DS3231_LINK_RECEIVE_CALLBACK(HANDLE, FUC)  (HANDLE)->receive_callback = FUC
@@ -289,7 +289,7 @@ typedef struct ds3231_info_s
 
 /**
  * @brief      get chip's information
- * @param[out] *info points to a ds3231 info structure
+ * @param[out] *info pointer to a ds3231 info structure
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -299,7 +299,7 @@ uint8_t ds3231_info(ds3231_info_t *info);
 
 /**
  * @brief     initialize the chip
- * @param[in] *handle points to a ds3231 handle structure
+ * @param[in] *handle pointer to a ds3231 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 iic initialization failed
@@ -311,7 +311,7 @@ uint8_t ds3231_init(ds3231_handle_t *handle);
 
 /**
  * @brief     close the chip
- * @param[in] *handle points to a ds3231 handle structure
+ * @param[in] *handle pointer to a ds3231 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 iic deinit failed
@@ -323,7 +323,7 @@ uint8_t ds3231_deinit(ds3231_handle_t *handle);
 
 /**
  * @brief     irq handler
- * @param[in] *handle points to a ds3231 handle structure
+ * @param[in] *handle pointer to a ds3231 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 run failed
@@ -335,8 +335,8 @@ uint8_t ds3231_irq_handler(ds3231_handle_t *handle);
 
 /**
  * @brief     set the current time
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] *t points to a time structure
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] *t pointer to a time structure
  * @return    status code
  *            - 0 success
  *            - 1 set time failed
@@ -349,8 +349,8 @@ uint8_t ds3231_set_time(ds3231_handle_t *handle, ds3231_time_t *t);
 
 /**
  * @brief      get the current time
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *t points to a time structure
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *t pointer to a time structure
  * @return     status code
  *             - 0 success
  *             - 1 get time failed
@@ -362,8 +362,8 @@ uint8_t ds3231_get_time(ds3231_handle_t *handle, ds3231_time_t *t);
 
 /**
  * @brief     enable or disable the oscillator
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] enable is a bool value
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] enable bool value
  * @return    status code
  *            - 0 success
  *            - 1 set oscillator failed
@@ -375,8 +375,8 @@ uint8_t ds3231_set_oscillator(ds3231_handle_t *handle, ds3231_bool_t enable);
 
 /**
  * @brief      get the chip oscillator status
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *enable points to a bool value buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *enable pointer to a bool value buffer
  * @return     status code
  *             - 0 success
  *             - 1 get oscillator failed
@@ -388,8 +388,8 @@ uint8_t ds3231_get_oscillator(ds3231_handle_t *handle, ds3231_bool_t *enable);
 
 /**
  * @brief      get the chip status
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *status points to a chip status buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *status pointer to a chip status buffer
  * @return     status code
  *             - 0 success
  *             - 1 get status failed
@@ -412,8 +412,8 @@ uint8_t ds3231_get_status(ds3231_handle_t *handle, uint8_t *status);
 
 /**
  * @brief     set the chip pin function
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] pin is the pin's function
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] pin pin function
  * @return    status code
  *            - 0 success
  *            - 1 set pin failed
@@ -425,8 +425,8 @@ uint8_t ds3231_set_pin(ds3231_handle_t *handle, ds3231_pin_t pin);
 
 /**
  * @brief      get the chip pin function
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *pin points to a pin's function buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *pin pointer to a pin's function buffer
  * @return     status code
  *             - 0 success
  *             - 1 get pin failed
@@ -438,8 +438,8 @@ uint8_t ds3231_get_pin(ds3231_handle_t *handle, ds3231_pin_t *pin);
 
 /**
  * @brief     enable or disable the square wave output
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] enable is a bool value
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] enable bool value
  * @return    status code
  *            - 0 success
  *            - 1 set square wave failed
@@ -451,8 +451,8 @@ uint8_t ds3231_set_square_wave(ds3231_handle_t *handle, ds3231_bool_t enable);
 
 /**
  * @brief      get the square wave output status
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *enable points to a bool value buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *enable pointer to a bool value buffer
  * @return     status code
  *             - 0 success
  *             - 1 get square wave failed
@@ -464,8 +464,8 @@ uint8_t ds3231_get_square_wave(ds3231_handle_t *handle, ds3231_bool_t *enable);
 
 /**
  * @brief     enable or disable the 32KHz output
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] enable is a bool value
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] enable bool value
  * @return    status code
  *            - 0 success
  *            - 1 set 32khz output failed
@@ -477,8 +477,8 @@ uint8_t ds3231_set_32khz_output(ds3231_handle_t *handle, ds3231_bool_t enable);
 
 /**
  * @brief      get the 32KHz output status
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *enable points to a bool value buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *enable pointer to a bool value buffer
  * @return     status code
  *             - 0 success
  *             - 1 get 32khz output failed
@@ -490,9 +490,9 @@ uint8_t ds3231_get_32khz_output(ds3231_handle_t *handle, ds3231_bool_t *enable);
 
 /**
  * @brief      get the chip temperature
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *raw points to a raw temperature buffer
- * @param[out] *s points to a converted temperature buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *raw pointer to a raw temperature buffer
+ * @param[out] *s pointer to a converted temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 get temperature failed
@@ -504,8 +504,8 @@ uint8_t ds3231_get_temperature(ds3231_handle_t *handle, int16_t *raw, float *s);
 
 /**
  * @brief     set the chip aging offset
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] offset is time aging offset
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] offset time aging offset
  * @return    status code
  *            - 0 success
  *            - 1 set aging offset failed
@@ -517,8 +517,8 @@ uint8_t ds3231_set_aging_offset(ds3231_handle_t *handle, int8_t offset);
 
 /**
  * @brief      get the chip aging offset
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *offset points to a time aging offset buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *offset pointer to a time aging offset buffer
  * @return     status code
  *             - 0 success
  *             - 1 get aging offset failed
@@ -530,9 +530,9 @@ uint8_t ds3231_get_aging_offset(ds3231_handle_t *handle, int8_t *offset);
 
 /**
  * @brief      convert a aging offset value to a register raw data
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[in]  offset is a converted aging offset value
- * @param[out] *reg points to a register raw buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[in]  offset converted aging offset value
+ * @param[out] *reg pointer to a register raw buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -543,9 +543,9 @@ uint8_t ds3231_aging_offset_convert_to_register(ds3231_handle_t *handle, float o
 
 /**
  * @brief      convert a register raw data to a converted aging offset data
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[in]  reg is the register raw data
- * @param[out] *offset points to a converted aging offset buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[in]  reg register raw data
+ * @param[out] *offset pointer to a converted aging offset buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -567,9 +567,9 @@ uint8_t ds3231_aging_offset_convert_to_data(ds3231_handle_t *handle, int8_t reg,
 
 /**
  * @brief     enable or disable the alarm interrupt
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] alarm is the alarm number
- * @param[in] enable is a bool value
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] alarm alarm number
+ * @param[in] enable bool value
  * @return    status code
  *            - 0 success
  *            - 1 set alarm interrupt failed
@@ -581,9 +581,9 @@ uint8_t ds3231_set_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm
 
 /**
  * @brief      get the alarm interrupt status
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[in]  alarm is the alarm number
- * @param[out] *enable points to a bool value buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[in]  alarm alarm number
+ * @param[out] *enable pointer to a bool value buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm interrupt failed
@@ -595,9 +595,9 @@ uint8_t ds3231_get_alarm_interrupt(ds3231_handle_t *handle, ds3231_alarm_t alarm
 
 /**
  * @brief     set the alarm1 time
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] *t points to a time structure
- * @param[in] mode is the alarm1 interrupt mode
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] *t pointer to a time structure
+ * @param[in] mode alarm1 interrupt mode
  * @return    status code
  *            - 0 success
  *            - 1 set alarm1 failed
@@ -609,9 +609,9 @@ uint8_t ds3231_set_alarm1(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
 
 /**
  * @brief      get the alarm1 time
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *t points to a time structure
- * @param[out] *mode points to an alarm1 interrupt mode buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *t pointer to a time structure
+ * @param[out] *mode pointer to an alarm1 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm1 failed
@@ -623,9 +623,9 @@ uint8_t ds3231_get_alarm1(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
 
 /**
  * @brief     set the alarm2 time
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] *t points to a time structure
- * @param[in] mode is the alarm2 interrupt mode
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] *t pointer to a time structure
+ * @param[in] mode alarm2 interrupt mode
  * @return    status code
  *            - 0 success
  *            - 1 set alarm2 failed
@@ -637,9 +637,9 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
 
 /**
  * @brief      get the alarm2 time
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[out] *t points to a time structure
- * @param[out] *mode points to an alarm2 interrupt mode buffer
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[out] *t pointer to a time structure
+ * @param[out] *mode pointer to an alarm2 interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 1 get alarm2 failed
@@ -651,8 +651,8 @@ uint8_t ds3231_get_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
 
 /**
  * @brief     clear the alarm flag
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] alarm is the alarm number
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] alarm alarm number
  * @return    status code
  *            - 0 success
  *            - 1 alarm clear failed
@@ -675,10 +675,10 @@ uint8_t ds3231_alarm_clear(ds3231_handle_t *handle, ds3231_alarm_t alarm);
 
 /**
  * @brief     set the chip register
- * @param[in] *handle points to a ds3231 handle structure
- * @param[in] reg is the iic register address
- * @param[in] *buf points to a data buffer
- * @param[in] len is the data buffer length
+ * @param[in] *handle pointer to a ds3231 handle structure
+ * @param[in] reg iic register address
+ * @param[in] *buf pointer to a data buffer
+ * @param[in] len data buffer length
  * @return    status code
  *            - 0 success
  *            - 1 write failed
@@ -690,10 +690,10 @@ uint8_t ds3231_set_reg(ds3231_handle_t *handle, uint8_t reg, uint8_t *buf, uint1
 
 /**
  * @brief      get the chip register
- * @param[in]  *handle points to a ds3231 handle structure
- * @param[in]  reg is the iic register address
- * @param[out] *buf points to a data buffer
- * @param[in]  len is the data buffer length
+ * @param[in]  *handle pointer to a ds3231 handle structure
+ * @param[in]  reg iic register address
+ * @param[out] *buf pointer to a data buffer
+ * @param[in]  len data buffer length
  * @return     status code
  *             - 0 success
  *             - 1 read failed

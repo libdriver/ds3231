@@ -77,7 +77,7 @@ uint8_t ds3231_basic_deinit(void);
 
 /**
  * @brief     basic example set the time
- * @param[in] *t points to a time structure
+ * @param[in] *t pointer to a time structure
  * @return    status code
  *            - 0 success
  *            - 1 set time failed
@@ -87,7 +87,7 @@ uint8_t ds3231_basic_set_time(ds3231_time_t *t);
 
 /**
  * @brief      basic example get the time
- * @param[out] *t points to a time structure
+ * @param[out] *t pointer to a time structure
  * @return     status code
  *             - 0 success
  *             - 1 get time failed
@@ -97,7 +97,7 @@ uint8_t ds3231_basic_get_time(ds3231_time_t *t);
 
 /**
  * @brief     basic example set the time by a unix timestamp
- * @param[in] timestamp is a unix timestamp
+ * @param[in] timestamp unix timestamp
  * @return    status code
  *            - 0 success
  *            - 1 set timestamp failed
@@ -107,7 +107,7 @@ uint8_t ds3231_basic_set_timestamp(time_t timestamp);
 
 /**
  * @brief      basic example get the time in a unix timestamp
- * @param[out] *timestamp points to a unix timestamp buffer
+ * @param[out] *timestamp pointer to a unix timestamp buffer
  * @return     status code
  *             - 0 success
  *             - 1 get timestamp failed
@@ -117,7 +117,7 @@ uint8_t ds3231_basic_get_timestamp(time_t *timestamp);
 
 /**
  * @brief     basic example set the local time zone
- * @param[in] zone is the local time zone
+ * @param[in] zone local time zone
  * @return    status code
  *            - 0 success
  * @note      none
@@ -126,7 +126,7 @@ uint8_t ds3231_basic_set_timestamp_time_zone(int8_t zone);
 
 /**
  * @brief      basic example get the local time zone
- * @param[out] *zone points to a local time zone buffer
+ * @param[out] *zone pointer to a local time zone buffer
  * @return     status code
  *             - 0 success
  * @note       none
@@ -135,8 +135,8 @@ uint8_t ds3231_basic_get_timestamp_time_zone(int8_t *zone);
 
 /**
  * @brief      basic example get the current temperature
- * @param[out] *raw points to a raw temperature buffer
- * @param[out] *s points to a converted temperature buffer
+ * @param[out] *raw pointer to a raw temperature buffer
+ * @param[out] *s pointer to a converted temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 read temperature failed
@@ -146,8 +146,8 @@ uint8_t ds3231_basic_get_temperature(int16_t *raw, float *s);
 
 /**
  * @brief      basic example get the ascii time
- * @param[out] *buf points to an ascii buffer
- * @param[in]  len is the data length
+ * @param[out] *buf pointer to an ascii buffer
+ * @param[in]  len data length
  * @return     status code
  *             - 0 success
  *             - 1 read failed
