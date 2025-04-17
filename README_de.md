@@ -10,7 +10,7 @@
 
 Der DS3231 ist eine kostengünstige, extrem genaue I2C-Echtzeituhr (RTC) mit einem integrierten temperaturkompensierten Quarzoszillator (TCXO) und Quarz. Das Gerät verfügt über einen Batterieeingang und behält die genaue Zeitmessung bei, wenn die Hauptstromversorgung des Geräts unterbrochen wird. Die Integration des Kristallresonators verbessert die Langzeitgenauigkeit des Geräts und reduziert die Stückzahl in einer Fertigungslinie. Der DS3231 ist in kommerziellen und industriellen Temperaturbereichen erhältlich und wird in einem 16-Pin-300-mil-SO-Gehäuse angeboten.
 
-LibDriver DS3231 ist ein voll funktionsfähiger Treiber von ds3231, der von LibDriver gestartet wurde. Er bietet Zeitablesung, Weckerauslösung, Temperaturmessung, Rechteckwellenausgabe und andere Funktionen. LibDriver ist MISRA-konform.
+LibDriver DS3231 ist ein voll funktionsfähiger Treiber von DS3231, der von LibDriver gestartet wurde. Er bietet Zeitablesung, Weckerauslösung, Temperaturmessung, Rechteckwellenausgabe und andere Funktionen. LibDriver ist MISRA-konform.
 
 ### Inhaltsverzeichnis
 

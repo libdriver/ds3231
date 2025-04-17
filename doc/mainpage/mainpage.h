@@ -1,10 +1,10 @@
 /**
  * @mainpage  LibDriver DS3231
- * @brief     LibDriver DS3231 is a full function driver of DS3231 and it can run in both MCU and Linux platform.
+ * @brief     LibDriver DS3231 is a full-featured driver of DS3231 and it can run in both MCU and Linux platform.
  * @version   2.0.0
  * @author    Shifeng Li
  *
- * <h3>history</h3>
+ * <h3>History</h3>
  * <table>
  * <tr><th>Date        <th>Version  <th>Author      <th>Description
  * <tr><td>2021/03/15  <td>2.0      <td>Shifeng Li  <td>format the code
