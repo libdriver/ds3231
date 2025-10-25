@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['receive_5fcallback_201',['receive_callback',['../structds3231__handle__s.html#a4a9a1af4e28aea769f6d9f02a02e07c3',1,'ds3231_handle_s']]]
+  ['libdriver_20ds3231_0',['LibDriver DS3231',['../index.html',1,'']]],
+  ['link_20driver_20function_1',['ds3231 link driver function',['../group__ds3231__link__driver.html',1,'']]]
 ];
