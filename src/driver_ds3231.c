@@ -45,7 +45,7 @@
 #define SUPPLY_VOLTAGE_MIN        2.3f                             /**< chip min supply voltage */
 #define SUPPLY_VOLTAGE_MAX        5.5f                             /**< chip max supply voltage */
 #define MAX_CURRENT               0.65f                            /**< chip max current */
-#define TEMPERATURE_MIN           -40.0f                           /**< chip min operating temperature */
+#define TEMPERATURE_MIN           -45.0f                           /**< chip min operating temperature */
 #define TEMPERATURE_MAX           85.0f                            /**< chip max operating temperature */
 #define DRIVER_VERSION            2000                             /**< driver version */
 
@@ -754,7 +754,7 @@ uint8_t ds3231_set_alarm2(ds3231_handle_t *handle, ds3231_time_t *t, ds3231_alar
         
         return 1;                                                                                                                  /* return error */
     }
-    if (mode >= (uint8_t)DS3231_ALARM1_MODE_WEEK_HOUR_MINUTE_SECOND_MATCH)                                                         /* if week */
+    if (mode >= (uint8_t)DS3231_ALARM2_MODE_WEEK_HOUR_MINUTE_MATCH)                                                                /* if week */
     {
         reg = (((mode >> 2) & 0x01) << 7) | (1 << 6) | a_ds3231_hex2bcd(t->week);                                                  /* set data in week */
     }
@@ -1248,12 +1248,7 @@ uint8_t ds3231_get_temperature(ds3231_handle_t *handle, int16_t *raw, float *s)
         return 1;                                                                               /* return error */
     }
     *raw = (int16_t)(((uint16_t)buf[0]) << 8) | buf[1];                                         /* set raw temperature */
-    *raw = (*raw) >> 6;                                                                         /* right shift */
-    if (((*raw) & 0x0200) != 0)                                                                 /* set negative value */
-    {
-        *raw = (*raw) | 0xFC00U;                                                                /* set negative part */
-    }
-    *s = (float)(*raw) * 0.25f;                                                                 /* set converted temperature */
+    *s = (float)((int8_t)(buf[0])) + (float)(buf[1] >> 6) * 0.25f;                              /* set converted temperature */
     
     return 0;                                                                                   /* success return 0 */
 }
