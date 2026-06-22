@@ -245,7 +245,7 @@ ds3231: min supply voltage is 2.3V.
 ds3231: max supply voltage is 5.5V.
 ds3231: max current is 0.65mA.
 ds3231: max temperature is 85.0C.
-ds3231: min temperature is -40.0C.
+ds3231: min temperature is -45.0C.
 ```
 
 ```shell
